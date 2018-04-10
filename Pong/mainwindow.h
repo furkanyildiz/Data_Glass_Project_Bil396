@@ -24,6 +24,8 @@ private:
     Ui::MainWindow *ui;
     Gameplay *iLoop;
     int iScore;
+    int P1iScore;
+    int P2iScore;
     std::string str;
 };
 

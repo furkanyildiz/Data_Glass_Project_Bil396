@@ -12,7 +12,8 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    iScore ( 0 )
+    P1iScore ( 0 ),
+    P2iScore ( 0 )
 {
     ui->setupUi(this);
 
@@ -47,7 +48,20 @@ MainWindow::~MainWindow()
 
 void MainWindow::addScore(int count)
 {
-    iScore += count;
-    ui->lcdNumber->display(iScore);
+
+    if(count == 1)
+        P1iScore++;
+    else
+        P2iScore++;
+    ui->label_3->setText(QString::number(P1iScore));
+    ui->label_4->setText(QString::number(P2iScore));
+
+    if(P1iScore > P2iScore){
+        ui->label_5->setText("p1 leads");
+    }else if(P1iScore == P2iScore){
+        ui->label_5->setText("draw");
+    }else{
+        ui->label_5->setText("p2 leads");
+    }
 }
 
