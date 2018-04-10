@@ -11,11 +11,11 @@ Gameplay::Gameplay(QGraphicsScene & scene, QGraphicsItem *p1, QGraphicsItem *p2,
     iP1 ( p1 ),
     iP2 ( p2 ),
     iBall ( ball ),
-    iBallDirection ( -3, -3 ),
+    iBallDirection ( -3, -3 ), //ilk anda topun hareket yönü
     iP1Direction( 0 ),
     iP2Direction( 0 )
 {
-    iScene.setSceneRect(0, 0, 350, 320);
+    iScene.setSceneRect(0, 0,  350,320);
     iScene.addItem(iP1);
     iScene.addItem(iP2);
     iScene.addItem(iBall);
@@ -27,7 +27,9 @@ Gameplay::Gameplay(QGraphicsScene & scene, QGraphicsItem *p1, QGraphicsItem *p2,
     iTimer = new QTimer(this);
     iTimer->setInterval(12);
     iTimer->start();
+
     QObject::connect(iTimer, SIGNAL(timeout()), this, SLOT(tick()));
+
 }
 
 void Gameplay::tick()

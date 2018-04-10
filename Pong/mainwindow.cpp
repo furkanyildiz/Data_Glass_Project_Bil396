@@ -8,6 +8,7 @@
 #include <QResizeEvent>
 #include <QDebug>
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -27,15 +28,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->boardView->setScene(scene);
 
-    iLoop = new Gameplay(*scene, p1, p2, ball, this);
-    QSize m(scene->sceneRect().size().width() + 10, scene->sceneRect().size().height() + 10);
+    iLoop = new Gameplay(*scene, p1, p2, ball, this); // GamePlay objesi oluşturuldu. Oyunu bu yönetir.
+
+    QSize m(scene->sceneRect().size().width(), scene->sceneRect().size().height());
+
     ui->boardView->setMinimumSize(m);
 
-    resize(minimumSize());
+    resize(maximumSize());
     ui->boardView->installEventFilter(iLoop);
 
-    QObject::connect(iLoop, SIGNAL(goal(int)),
-                     this, SLOT(addScore(int)));
+    QObject::connect(iLoop, SIGNAL(goal(int)), this, SLOT(addScore(int)));
 }
 
 MainWindow::~MainWindow()

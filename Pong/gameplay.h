@@ -8,7 +8,8 @@ class QTimer;
 
 class Gameplay : public QObject
 {
-    Q_OBJECT
+    Q_OBJECT // bu macro meta-obje içeren tüm classlarda bulunmalı,q
+
 public:
     explicit Gameplay(QGraphicsScene & scene, QGraphicsItem *p1, QGraphicsItem *p2, QGraphicsItem *ball, QObject *parent);
 
