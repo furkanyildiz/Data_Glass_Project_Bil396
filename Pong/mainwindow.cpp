@@ -7,7 +7,7 @@
 #include <QPen>
 #include <QResizeEvent>
 #include <QDebug>
-
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -31,11 +31,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     iLoop = new Gameplay(*scene, p1, p2, ball, this); // GamePlay objesi oluşturuldu. Oyunu bu yönetir.
 
-    QSize m(scene->sceneRect().size().width(), scene->sceneRect().size().height());
+    QSize m(scene->sceneRect().size().width() + 15, scene->sceneRect().size().height() + 15);
 
     ui->boardView->setMinimumSize(m);
 
-    resize(maximumSize());
+    resize(minimumSize());
     ui->boardView->installEventFilter(iLoop);
 
     QObject::connect(iLoop, SIGNAL(goal(int)), this, SLOT(addScore(int)));
@@ -48,20 +48,28 @@ MainWindow::~MainWindow()
 
 void MainWindow::addScore(int count)
 {
-
-    if(count == 1)
+    if(count == 1){
         P1iScore++;
-    else
+        ui->playerScore->display(P1iScore);
+        ui->playerScore->setPalette(Qt::blue);
+        ui->showGoal->setText("                 GOAL! Player Scored");
+        ui->showGoal->setVisible(true);
+    }
+    else{
         P2iScore++;
-    ui->label_3->setText(QString::number(P1iScore));
-    ui->label_4->setText(QString::number(P2iScore));
+        ui->aiScore->display(P2iScore);
+        ui->aiScore->setPalette(Qt::green);
+        ui->showGoal->setText("                  GOAL! Ai Scored");
+        ui->showGoal->setVisible(true);
+    }
 
     if(P1iScore > P2iScore){
-        ui->label_5->setText("p1 leads");
+        ui->status->setText("P1 leads the game");
     }else if(P1iScore == P2iScore){
-        ui->label_5->setText("draw");
+        ui->status->setText("Draw");
     }else{
-        ui->label_5->setText("p2 leads");
+        ui->status->setText("AI leads the game");
     }
+    QTimer::singleShot(500, ui->showGoal, &QLabel::hide);
 }
 

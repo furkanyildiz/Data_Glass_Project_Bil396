@@ -7,7 +7,8 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     //w.setWindowState(w.windowState() ^ Qt::WindowFullScreen);
-    w.setWindowState(Qt::WindowMaximized);
+    //w.setWindowState(Qt::WindowMaximized);
+    w.setWindowTitle("Pong");
     w.show();
 
     return a.exec();
