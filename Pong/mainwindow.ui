@@ -15,8 +15,42 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="4" column="0" colspan="5">
+    <item row="2" column="3">
+     <widget class="QLCDNumber" name="playerScore"/>
+    </item>
+    <item row="3" column="4">
+     <widget class="QLabel" name="ai">
+      <property name="text">
+       <string>AI</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="4">
+     <widget class="QLabel" name="player">
+      <property name="text">
+       <string>Player</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="3">
+     <widget class="QLCDNumber" name="aiScore"/>
+    </item>
+    <item row="2" column="2">
+     <widget class="QLabel" name="scoreboard">
+      <property name="text">
+       <string>Scoreboard</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0" colspan="5">
      <widget class="QGraphicsView" name="boardView"/>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLabel" name="showGoal">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
     </item>
     <item row="3" column="1">
      <widget class="QLabel" name="status">
@@ -31,37 +65,10 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
-     <widget class="QLabel" name="showGoal">
+    <item row="4" column="1">
+     <widget class="QLabel" name="labelPlayers">
       <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2">
-     <widget class="QLabel" name="scoreboard">
-      <property name="text">
-       <string>Scoreboard</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="3">
-     <widget class="QLCDNumber" name="playerScore"/>
-    </item>
-    <item row="3" column="3">
-     <widget class="QLCDNumber" name="aiScore"/>
-    </item>
-    <item row="2" column="4">
-     <widget class="QLabel" name="player">
-      <property name="text">
-       <string>Player</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="4">
-     <widget class="QLabel" name="ai">
-      <property name="text">
-       <string>AI</string>
+       <string>Wait for connecting...</string>
       </property>
      </widget>
     </item>

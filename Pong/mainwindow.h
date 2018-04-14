@@ -3,7 +3,9 @@
 
 #include <QMainWindow>
 #include <string>
+
 class Gameplay;
+class Server;
 
 namespace Ui {
     class MainWindow;
@@ -16,6 +18,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void addPlayer(int count);
 
 private slots:
     void addScore(int count);
@@ -27,6 +30,7 @@ private:
     int P1iScore;
     int P2iScore;
     std::string str;
+    Server *server;
 };
 
 #endif // MAINWINDOW_H

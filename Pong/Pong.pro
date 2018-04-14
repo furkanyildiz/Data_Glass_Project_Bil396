@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
-
+QT       += network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Pong
@@ -25,9 +25,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES +=  main.cpp\
             mainwindow.cpp \
-            gameplay.cpp
+            gameplay.cpp \
+    server.cpp
 
 HEADERS  += mainwindow.h \
-            gameplay.h
+            gameplay.h \
+    server.h
 
 FORMS    += mainwindow.ui

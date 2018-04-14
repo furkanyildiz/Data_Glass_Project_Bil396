@@ -8,6 +8,7 @@
 #include <QResizeEvent>
 #include <QDebug>
 #include <QTimer>
+#include <server.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -39,6 +40,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->boardView->installEventFilter(iLoop);
 
     QObject::connect(iLoop, SIGNAL(goal(int)), this, SLOT(addScore(int)));
+    server = new Server(parent,this);
+
 }
 
 MainWindow::~MainWindow()
@@ -73,3 +76,8 @@ void MainWindow::addScore(int count)
     QTimer::singleShot(500, ui->showGoal, &QLabel::hide);
 }
 
+
+void MainWindow::addPlayer(int count){
+    std::string s = " The player who participated in the game : Player"  + std::to_string(count);
+    ui->labelPlayers->setText(s.c_str());
+}
