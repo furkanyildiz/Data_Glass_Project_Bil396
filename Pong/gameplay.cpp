@@ -4,6 +4,7 @@
 #include <QTimer>
 #include <QEvent>
 #include <QKeyEvent>
+#include <math.h>
 
 Gameplay::Gameplay(QGraphicsScene & scene, QGraphicsItem *p1, QGraphicsItem *p2, QGraphicsItem *ball, QObject *parent) :
     QObject(parent),
@@ -48,7 +49,7 @@ void Gameplay::tick()
     if ( ( newY < 0 ) || ( newY + iBall->boundingRect().bottom() > iScene.sceneRect().bottom() ) )
     {
         // 1 for hitting the bottom wall, -1 for hitting the top wall
-        emit goal(newY / abs(newY));
+        emit goal(newY / fabs(newY));
         iBallDirection.ry() *= -1;
     }
 
