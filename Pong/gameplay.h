@@ -24,6 +24,7 @@ private slots:
 
 private:
     qreal calculateP2Direction();
+    qreal randomPlayerMovement();
 private:
     QGraphicsScene & iScene;
     QGraphicsItem *iP1, *iP2, *iBall;

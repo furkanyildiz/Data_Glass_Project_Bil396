@@ -76,6 +76,8 @@ void Gameplay::tick()
     if ( qrand() % 10 == 0 )
     {
         iP2Direction = calculateP2Direction();
+    }else if(qrand() % 7 == 0){
+        iP1Direction = randomPlayerMovement();
     }
 
 
@@ -89,21 +91,21 @@ bool Gameplay::eventFilter(QObject *target, QEvent *e)
     Q_UNUSED(target);
 
     bool handled = false;
-    if ( e->type() == QEvent::KeyPress )
-    {
-        QKeyEvent *keyEvent = (QKeyEvent *)e;
+//    if ( e->type() == QEvent::KeyPress )
+//    {
+//        QKeyEvent *keyEvent = (QKeyEvent *)e;
 
-        if ( keyEvent->key() == Qt::Key_Left )
-        {
-            iP1Direction = (iP1Direction == 0 ? -5 : 0);
-            handled = true;
-        }
-        else if ( keyEvent->key() == Qt::Key_Right )
-        {
-            iP1Direction  = (iP1Direction == 0 ? 5 : 0);
-            handled = true;
-        }
-    }
+//        if ( keyEvent->key() == Qt::Key_Left )
+//        {
+//            iP1Direction = (iP1Direction == 0 ? -5 : 0);
+//            handled = true;
+//        }
+//        else if ( keyEvent->key() == Qt::Key_Right )
+//        {
+//            iP1Direction  = (iP1Direction == 0 ? 5 : 0);
+//            handled = true;
+//        }
+//    }
 
     return handled;
 }
@@ -125,4 +127,22 @@ qreal Gameplay::calculateP2Direction()
 
     return dir;
 
+}
+qreal Gameplay::randomPlayerMovement(){
+    qreal dir = 0;
+    qreal rnd = 0;
+    rnd = qrand() % 10;
+
+    if ( iBall->pos().x() + iBallDirection.x() > iP1->sceneBoundingRect().right() )
+    {
+        // move right
+        dir = rnd;
+    }
+    else if ( iBall->pos().x() + iBallDirection.x() < iP1->sceneBoundingRect().left() )
+    {
+        // move left
+        dir = -rnd;
+    }
+
+    return dir;
 }
