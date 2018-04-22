@@ -4,6 +4,7 @@
 #include <iostream>
 #include <server.h>
 #include <mainwindow.h>
+#include <mythread.h>
 
 Server::Server(QWidget *parent, MainWindow *mWindow)
     : QDialog(parent)
@@ -56,8 +57,8 @@ void Server::sessionOpened()
     tcpServer = new QTcpServer(this);
     QHostAddress *addr= new QHostAddress(IPADDRESS);
     if (!tcpServer->listen(*addr,PORTNUMBER)) {
-        QMessageBox::critical(this, tr("Fortune Server"),
-                              tr("Unable to start the server: %1.")
+        QMessageBox::critical(this, tr("Server"),
+                              tr("Unable to start the server From Session: %1.")
                               .arg(tcpServer->errorString()));
         close();
         return;
@@ -80,11 +81,17 @@ void Server::sessionOpened()
 
 void Server::readWrite()
 {
+    MyThread *thread = new MyThread(tcpServer->socketDescriptor(), this, tcpServer);
+    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+    thread->start();
+
+    /*
     QByteArray block;
     QDataStream out(&block, QIODevice::ReadWrite);
     out.setVersion(QDataStream::Qt_5_10);
 
     out << "This message sending from data glass.";
+
 
     QTcpSocket *clientConnection = tcpServer->nextPendingConnection();
     connect(clientConnection, &QAbstractSocket::disconnected,
@@ -105,7 +112,8 @@ void Server::readWrite()
 
     qDebug() << "Client disconnected";
 
-
+    qDebug() << "Glass connected\n";
+    */
     mainWindow->addPlayer(playerNumber);
     playerNumber++;
 }

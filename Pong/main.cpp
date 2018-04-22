@@ -6,10 +6,10 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    MainWindow w;
+    //MainWindow w;
     Menu menu;
-    w.setWindowState(Qt::WindowMaximized);
-    w.setWindowTitle("Pong");
+    //w.setWindowState(Qt::WindowMaximized);
+    //w.setWindowTitle("Pong");
     //w.show();
     menu.show();
 

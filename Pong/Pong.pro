@@ -27,12 +27,14 @@ SOURCES +=  main.cpp\
             mainwindow.cpp \
             gameplay.cpp \
             menu.cpp\
-            server.cpp
+            server.cpp \
+    mythread.cpp
 
 HEADERS  += mainwindow.h \
             gameplay.h \
             menu.h\
-    server.h
+    server.h \
+    mythread.h
 
 FORMS    += mainwindow.ui\
             menu.ui
