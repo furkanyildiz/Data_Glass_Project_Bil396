@@ -12,8 +12,8 @@ Menu::Menu(QWidget *parent) :
     ui(new Ui::Menu)
 {
     ui->setupUi(this);
-    connect(ui->listWidget_2, SIGNAL(itemClicked(QListWidgetItem*)),
-                this, SLOT(on_listWidget_2_itemClicked(QListWidgetItem*)));
+    connect(ui->listWidget_2, SIGNAL(itemClicked(QListWidgetItem*, int)),
+                this, SLOT(on_listWidget_2_itemClicked(QListWidgetItem*, int)));
 }
 
 Menu::~Menu()
