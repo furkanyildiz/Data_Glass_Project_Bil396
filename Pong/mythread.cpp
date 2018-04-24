@@ -15,49 +15,40 @@ MyThread::MyThread(int ID, QObject *parent,QTcpServer *server) :
 
 void MyThread::run()
 {
-    QByteArray block;
-    QDataStream out(&block, QIODevice::ReadWrite);
-    out.setVersion(QDataStream::Qt_5_10);
+    qDebug() << socketDescriptor << " Starting thread";
 
-    out << "This message sending from data glass.";
+    socket= tcpServer->nextPendingConnection();
 
+    connect(socket, SIGNAL(readyRead()), this, SLOT(readWrite()),Qt::DirectConnection);
+    connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()),Qt::DirectConnection);
 
-    QTcpSocket *clientConnection = tcpServer->nextPendingConnection();
-    connect(clientConnection, &QAbstractSocket::disconnected,
-            clientConnection, &QObject::deleteLater);
-
-    clientConnection->write(block);
-
-    block.clear();
-
-    while((clientConnection->state() == QTcpSocket::ConnectedState)){
-        clientConnection->waitForReadyRead();
-        block.clear();
-        block = clientConnection->readAll();
-        qDebug() << " Client message is : " << block.data();
-
-    }
-    clientConnection->disconnectFromHost();
-
-    qDebug() << "Client disconnected";
+    qDebug() << socketDescriptor << " Client connected";
 
     // make this thread a loop
-    //exec();
+    exec();
+
+
 }
 
-void MyThread::readyRead()
+void MyThread::readWrite()
 {
-    qDebug()<<"READY READ";
-    QByteArray Data = socket->readAll();
+    qDebug()<<"READY READ AND WRITE";
+    QByteArray recData = socket->readAll();
 
-    qDebug() << socketDescriptor << " Data in: " << Data;
+    qDebug() << socketDescriptor << " This message receiving from data glass : " << recData;
 
-    socket->write(Data);
+    QByteArray sendData;
+    sendData.fill(0, 160);
+    QString str = "This message sending from server : ";
+    sendData.insert(0, str.toLocal8Bit());
+    sendData.insert(80,recData);
+    sendData.resize(160);
+
+    socket->write(sendData);
 }
 
 void MyThread::disconnected()
 {
-
     qDebug() << socketDescriptor << " Disconnected";
     socket->deleteLater();
     exit(0);
