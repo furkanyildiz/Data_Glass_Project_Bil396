@@ -10,9 +10,9 @@ class MyThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit MyThread(int iID, QObject *parent = 0,QTcpServer *server=0);
+    explicit MyThread(int iID, QObject *parent = 0,QTcpServer *server=0, int id = 0);
     void run();
-
+    int thread_id = 0;
 signals:
     void error(QTcpSocket::SocketError socketerror);
 

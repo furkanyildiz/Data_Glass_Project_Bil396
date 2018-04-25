@@ -8,7 +8,7 @@
 #include <mainwindow.h>
 
 #define PORTNUMBER 1357
-#define IPADDRESS "192.168.1.26"
+#define IPADDRESS "192.168.119.1"
 
 class QLabel;
 class QTcpServer;
@@ -30,6 +30,8 @@ private:
     QNetworkSession *networkSession = nullptr;
     MainWindow *mainWindow;
     int playerNumber;
+    int thread_id = 0;
+    QString revData;
 };
 
 #endif

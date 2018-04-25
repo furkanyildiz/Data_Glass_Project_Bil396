@@ -81,7 +81,7 @@ void Server::sessionOpened()
 
 void Server::readWrite()
 {
-    MyThread *thread = new MyThread(tcpServer->socketDescriptor(), this, tcpServer);
+    MyThread *thread = new MyThread(tcpServer->socketDescriptor(), this, tcpServer, ++thread_id);
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     thread->start();
 

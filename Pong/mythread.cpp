@@ -6,16 +6,21 @@
 #include <iostream>
 #include "mythread.h"
 
-MyThread::MyThread(int ID, QObject *parent,QTcpServer *server) :
+QByteArray data1;
+QByteArray data2;
+
+
+MyThread::MyThread(int ID, QObject *parent,QTcpServer *server, int id) :
     QThread(parent),
     tcpServer(server)
 {
+    this->thread_id = id;
     this->socketDescriptor = ID;
 }
 
 void MyThread::run()
 {
-    qDebug() << socketDescriptor << " Starting thread";
+    qDebug() << socketDescriptor << " Starting thread " << thread_id ;
 
     socket= tcpServer->nextPendingConnection();
 
@@ -35,16 +40,36 @@ void MyThread::readWrite()
     qDebug()<<"READY READ AND WRITE";
     QByteArray recData = socket->readAll();
 
-    qDebug() << socketDescriptor << " This message receiving from data glass : " << recData;
 
-    QByteArray sendData;
-    sendData.fill(0, 160);
-    QString str = "This message sending from server : ";
-    sendData.insert(0, str.toLocal8Bit());
-    sendData.insert(80,recData);
-    sendData.resize(160);
 
-    socket->write(sendData);
+
+    if(thread_id == 1){
+        data1 = recData;
+        qDebug() << socketDescriptor << " This message receiving from data glass : " << this->thread_id << data2;
+    }else{
+        data2 = recData;
+        qDebug() << socketDescriptor << " This message receiving from data glass : " << this->thread_id << data1;
+    }
+    if (thread_id == 2){
+        QByteArray sendData;
+        sendData.fill(0, 160);
+        QString str = "\nThis message sending from server : ";
+        sendData.insert(0, str.toLocal8Bit());
+        sendData.insert(80,data1);
+        sendData.resize(160);
+
+        socket->write(sendData);
+    }else{
+        QByteArray sendData;
+        sendData.fill(0, 160);
+        QString str = "\nThis message sending from server : ";
+        sendData.insert(0, str.toLocal8Bit());
+        sendData.insert(80,data2);
+        sendData.resize(160);
+
+        socket->write(sendData);
+    }
+
 }
 
 void MyThread::disconnected()
