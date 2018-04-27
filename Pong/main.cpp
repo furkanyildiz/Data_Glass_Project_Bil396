@@ -1,9 +1,7 @@
 #include <QApplication>
 #include "mainwindow.h"
 #include "menu.h"
-
-
-
+int main_data;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);

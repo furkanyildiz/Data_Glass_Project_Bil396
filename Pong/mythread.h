@@ -5,6 +5,9 @@
 #include <QTcpSocket>
 #include <QTcpServer>
 #include <QDebug>
+extern int cli_data;//CLIENT DAN GELECEK DATALAR
+extern int cli_data2;
+
 
 class MyThread : public QThread
 {

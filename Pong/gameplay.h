@@ -7,6 +7,9 @@
 class QGraphicsItem;
 class QTimer;
 
+extern int x_pos_of_ball;
+extern int y_pos_of_ball;
+
 class Gameplay : public QObject
 {
     Q_OBJECT // bu macro meta-obje içeren tüm classlarda bulunmalı,q
@@ -23,8 +26,9 @@ private slots:
     void tick();
 
 private:
-    qreal calculateP2Direction();
-    qreal randomPlayerMovement();
+    qreal calculateP2Direction(int client_data);
+    qreal calculateP1Direction(int client_data);
+      int data=5;
 private:
     QGraphicsScene & iScene;
     QGraphicsItem *iP1, *iP2, *iBall;

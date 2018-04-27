@@ -5,9 +5,15 @@
 #include <QtCore>
 #include <iostream>
 #include "mythread.h"
+#include "gameplay.h"
+
+int cli_data=0;//CLIENT DAN GELECEK DATA LAR
+int cli_data2=0;
+
 
 QByteArray data1;
 QByteArray data2;
+
 
 
 MyThread::MyThread(int ID, QObject *parent,QTcpServer *server, int id) :
@@ -46,9 +52,18 @@ void MyThread::readWrite()
     if(thread_id == 1){
         data1 = recData;
         qDebug() << socketDescriptor << " This message receiving from data glass : " << this->thread_id << data2;
+        bool ok;
+        int dec=recData.toInt(&ok,10);
+        if(dec%2==0) dec=dec*-1;
+        cli_data=dec;
+
     }else{
         data2 = recData;
         qDebug() << socketDescriptor << " This message receiving from data glass : " << this->thread_id << data1;
+        bool ok;
+        int dec=recData.toInt(&ok,10);
+        if(dec%2==0) dec=dec*-1;
+        cli_data2=dec;
     }
     if (thread_id == 2){
         QByteArray sendData;
@@ -69,7 +84,14 @@ void MyThread::readWrite()
 
         socket->write(sendData);
     }
-
+        QByteArray sendDataOfBall;
+        sendDataOfBall.fill(0, 160);
+        QString sx = QString::number(x_pos_of_ball);
+        QString sy = QString::number(y_pos_of_ball);
+        QString sxy="Ball position: x:"+sx+"y:"+sy+"\n";
+        sendDataOfBall.insert(0, sxy.toLocal8Bit());
+        sendDataOfBall.resize(160);
+        socket->write(sendDataOfBall);
 }
 
 void MyThread::disconnected()

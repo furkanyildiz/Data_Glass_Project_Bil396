@@ -19,9 +19,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     QGraphicsScene *scene = new QGraphicsScene(this);
-
     QGraphicsRectItem *p1 = new QGraphicsRectItem(0, 0, 80, 20);
     p1->setBrush(QBrush(Qt::blue));
+
     QGraphicsRectItem *p2 = new QGraphicsRectItem(0, 0, 80, 20);
     p2->setBrush(QBrush(Qt::green));
 
@@ -55,14 +55,14 @@ void MainWindow::addScore(int count)
         P1iScore++;
         ui->playerScore->display(P1iScore);
         ui->playerScore->setPalette(Qt::blue);
-        ui->showGoal->setText("                 GOAL! Player Scored");
+        ui->showGoal->setText("                 GOAL! Player1 Scored");
         ui->showGoal->setVisible(true);
     }
     else{
         P2iScore++;
         ui->aiScore->display(P2iScore);
         ui->aiScore->setPalette(Qt::green);
-        ui->showGoal->setText("                  GOAL! Ai Scored");
+        ui->showGoal->setText("                  GOAL! Player2 Scored");
         ui->showGoal->setVisible(true);
     }
 
@@ -71,7 +71,7 @@ void MainWindow::addScore(int count)
     }else if(P1iScore == P2iScore){
         ui->status->setText("Draw");
     }else{
-        ui->status->setText("AI leads the game");
+        ui->status->setText("P2 leads the game");
     }
     QTimer::singleShot(500, ui->showGoal, &QLabel::hide);
 }
