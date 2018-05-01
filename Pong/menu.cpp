@@ -45,22 +45,30 @@ void Menu::on_pushButton_2_clicked()
         if (btn2 == 1)
             ui->listWidget_2->show();
         else {
-            ui->listWidget_2->addItem("Gozluk 1     vs     Gozluk 2");
-            ui->listWidget_2->addItem("Gozluk 3     vs     Gozluk 5");
+            ui->listWidget_2->addItem("PONG");
+            ui->listWidget_2->addItem("ARCONOID");
             btn2 = 1;
         }
 }
 
 void Menu::on_listWidget_2_itemClicked(QListWidgetItem *item)
 {
-    //if(ui->listWidget_2->item(0) == item) {
-        cout << "Gozluk 1 vs Gozluk 2 cliced." << endl;
+    if(ui->listWidget_2->item(0) == item) {
+        cout << "PONG" << endl;
         MainWindow *w = new MainWindow;
 
         w->show();
 
         this->close();
-        //}
+    }else if(ui->listWidget_2->item(1) == item){
+       cout << "ARCONOID" << endl;
+       QWidget *p1;
+       MainWindow *w = new MainWindow(p1,2);
+
+        w->show();
+
+        this->close();
+    }
 }
 
 /*

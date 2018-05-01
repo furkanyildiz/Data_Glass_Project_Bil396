@@ -16,7 +16,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT // bu macro meta-obje içeren tüm classlarda bulunmalı
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = 0,int game_mode=1);
     ~MainWindow();
     void addPlayer(int count);
 
@@ -26,6 +26,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     Gameplay *iLoop;
+    int g_mode;
     int iScore;
     int P1iScore;
     int P2iScore;

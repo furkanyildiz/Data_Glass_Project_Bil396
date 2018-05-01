@@ -10,33 +10,44 @@
 #include <QTimer>
 #include <server.h>
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QWidget *parent,int game_mode) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     P1iScore ( 0 ),
     P2iScore ( 0 )
 {
+    g_mode=game_mode;
     ui->setupUi(this);
 
     QGraphicsScene *scene = new QGraphicsScene(this);
-    QGraphicsRectItem *p1 = new QGraphicsRectItem(0, 0, 80, 20);
+    QGraphicsRectItem *p1 = new QGraphicsRectItem(0, 0, 30, 5);
     p1->setBrush(QBrush(Qt::blue));
 
-    QGraphicsRectItem *p2 = new QGraphicsRectItem(0, 0, 80, 20);
+    QGraphicsRectItem *p2 = new QGraphicsRectItem(0, 0, 60, 5);
     p2->setBrush(QBrush(Qt::green));
 
-    QGraphicsEllipseItem *ball = new QGraphicsEllipseItem(0, 0, 15, 15);
+    QGraphicsEllipseItem *ball = new QGraphicsEllipseItem(0, 0, 4, 4);
     ball->setBrush(QBrush(Qt::magenta));
 
+    QGraphicsRectItem *token= new QGraphicsRectItem(0, 0, 5, 5);
+    token->setBrush(QBrush(Qt::black));
+
+    QGraphicsRectItem *innerPanel= new QGraphicsRectItem(0,0,128,256);//oyunun sınırlarını gösteren panel
+    innerPanel->setBrush(QBrush(Qt::yellow));
+    scene->addItem(innerPanel);
     ui->boardView->setScene(scene);
 
-    iLoop = new Gameplay(*scene, p1, p2, ball, this); // GamePlay objesi oluşturuldu. Oyunu bu yönetir.
 
-    QSize m(scene->sceneRect().size().width() + 15, scene->sceneRect().size().height() + 15);
+    if(g_mode==1)
+    iLoop = new Gameplay(*scene, p1, p2, ball,g_mode, token, this); // GamePlay objesi oluşturuldu. Oyunu bu yönetir.
+    else{
+       iLoop = new Gameplay(*scene, p1, p2, ball,g_mode, token, this);
+    }
+    QSize m(scene->sceneRect().size().width()+5, scene->sceneRect().size().height()+5);
 
     ui->boardView->setMinimumSize(m);
 
-    resize(minimumSize());
+    resize(m);
     ui->boardView->installEventFilter(iLoop);
 
     QObject::connect(iLoop, SIGNAL(goal(int)), this, SLOT(addScore(int)));
