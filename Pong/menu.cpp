@@ -46,7 +46,7 @@ void Menu::on_pushButton_2_clicked()
             ui->listWidget_2->show();
         else {
             ui->listWidget_2->addItem("PONG");
-            ui->listWidget_2->addItem("ARCONOID");
+            ui->listWidget_2->addItem("ARKANOID");
             btn2 = 1;
         }
 }
@@ -56,17 +56,13 @@ void Menu::on_listWidget_2_itemClicked(QListWidgetItem *item)
     if(ui->listWidget_2->item(0) == item) {
         cout << "PONG" << endl;
         MainWindow *w = new MainWindow;
-
         w->show();
-
         this->close();
     }else if(ui->listWidget_2->item(1) == item){
-       cout << "ARCONOID" << endl;
-       QWidget *p1;
-       MainWindow *w = new MainWindow(p1,2);
-
+        cout << "ARKANOID" << endl;
+        QWidget *p1 = NULL;
+        MainWindow *w = new MainWindow(p1, 2);
         w->show();
-
         this->close();
     }
 }
