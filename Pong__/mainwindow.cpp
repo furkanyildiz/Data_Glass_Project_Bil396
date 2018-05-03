@@ -68,14 +68,14 @@ void MainWindow::addScore(int count)
         P1iScore++;
         ui->playerScore->display(P1iScore);
         ui->playerScore->setPalette(Qt::blue);
-        ui->showGoal->setText("                 GOAL! Player1 Scored");
+        ui->showGoal->setText("GOAL! Player1 Scored");
         ui->showGoal->setVisible(true);
     }
     else{
         P2iScore++;
         ui->aiScore->display(P2iScore);
         ui->aiScore->setPalette(Qt::green);
-        ui->showGoal->setText("                  GOAL! Player2 Scored");
+        ui->showGoal->setText("GOAL! Player2 Scored");
         ui->showGoal->setVisible(true);
     }
 
