@@ -4,11 +4,13 @@
 #include <QObject>
 #include <QLabel>
 #include <QGraphicsScene>
+#include "constants.h"
 class QGraphicsItem;
 class QTimer;
 
 extern int x_pos_of_ball;
 extern int y_pos_of_ball;
+#define BLOCK_SIZE 8
 
 class Gameplay : public QObject
 {

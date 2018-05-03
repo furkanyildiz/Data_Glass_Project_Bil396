@@ -23,32 +23,36 @@ Gameplay::Gameplay(QGraphicsScene & scene, QGraphicsRectItem *p1, QGraphicsRectI
     iP2Direction( 0 )
 {
    g_mode=gameMode;
-    iScene.setSceneRect(0, 0,  128,256);
+   iScene.setSceneRect(0, 0, Constant::GAME_AREA_WIDTH, Constant::GAME_AREA_HEIGHT);
     if(g_mode==1){//pong ıcın
         iScene.addItem(iP1);
         iScene.addItem(iToken);
-        iP2->setRect(0,0,30,5);
     }
-    iScene.addItem(iP2);
-    iScene.addItem(iBall);
+    iP2->setRect(0,0,Constant::PLAYER2_WIDTH, Constant::PLAYER2_WIDTH);
+   iScene.addItem(iP2);
+   iScene.addItem(iBall);
 
 
-    iP1->setPos(49, 12);
-    iP2->setPos(49, 244);
-    iBall->setPos(64, 128);
-    iToken->setPos(120,90);
+    iP2->setPos(Constant::PLAYER2_POS_X, Constant::PLAYER2_POS_Y);
+    iBall->setPos(Constant::GAME_AREA_WIDTH/2, Constant::GAME_AREA_HEIGHT);
+
+    if(g_mode == 1){ // pong icin
+        iToken->setPos(Constant::GAME_AREA_WIDTH/3, Constant::GAME_AREA_HEIGHT/2);
+        iP1->setPos(Constant::PLAYER1_POS_X, Constant::PLAYER1_POS_Y);
+        std::cout << "the position of token and p1 are set" << std::endl;
+    }
 
     iTimer = new QTimer(this);
     iTimer->setInterval(20);
     iTimer->start();
 
-   if(g_mode==2){
-    setBlocks();
-    for(int i=0;i<8;i++){
-        block_state[i]=true;
+    if(g_mode==2){
+        setBlocks();
+        for(int i=0;i<BLOCK_SIZE;i++){
+            block_state[i]=true;
+        }
+        std::cout << "arkanoids blocks and boolean array are set" << std::endl;
     }
-
-   }
     QObject::connect(iTimer, SIGNAL(timeout()), this, SLOT(tick()));
 
 }

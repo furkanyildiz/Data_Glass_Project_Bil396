@@ -35,7 +35,11 @@ HEADERS  += mainwindow.h \
             gameplay.h \
             menu.h\
     server.h \
-    mythread.h
+    mythread.h \
+    constants.h
 
 FORMS    += mainwindow.ui\
             menu.ui
+
+RESOURCES += \
+    resources.qrc

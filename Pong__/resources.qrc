@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/Images">
+        <file>soccerField.png</file>
+        <file>darkSpace.jpg</file>
+    </qresource>
+</RCC>

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <string>
+#include "constants.h"
 
 class Gameplay;
 class Server;

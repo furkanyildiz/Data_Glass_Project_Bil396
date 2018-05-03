@@ -20,21 +20,29 @@ MainWindow::MainWindow(QWidget *parent,int game_mode) :
     ui->setupUi(this);
 
     QGraphicsScene *scene = new QGraphicsScene(this);
-    QGraphicsRectItem *p1 = new QGraphicsRectItem(0, 0, 30, 5);
+    QGraphicsRectItem *p1 = new QGraphicsRectItem(0, 0, Constant::PLAYER1_WIDTH, Constant::PLAYER1_HEIGHT);
     p1->setBrush(QBrush(Qt::blue));
 
-    QGraphicsRectItem *p2 = new QGraphicsRectItem(0, 0, 60, 5);
+    QGraphicsRectItem *p2 = new QGraphicsRectItem(0, 0, Constant::PLAYER2_WIDTH, Constant::PLAYER2_HEIGHT);
     p2->setBrush(QBrush(Qt::green));
 
-    QGraphicsEllipseItem *ball = new QGraphicsEllipseItem(0, 0, 4, 4);
+    QGraphicsEllipseItem *ball = new QGraphicsEllipseItem(0, 0, Constant::BALL_RAD, Constant::BALL_RAD);
     ball->setBrush(QBrush(Qt::magenta));
 
-    QGraphicsRectItem *token= new QGraphicsRectItem(0, 0, 5, 5);
+    QGraphicsRectItem *token = new QGraphicsRectItem(0, 0, 5, 5);
     token->setBrush(QBrush(Qt::black));
 
-    QGraphicsRectItem *innerPanel= new QGraphicsRectItem(0,0,128,256);//oyunun sınırlarını gösteren panel
+    /*QGraphicsRectItem *innerPanel= new QGraphicsRectItem(0,0,128,256);//oyunun sınırlarını gösteren panel
     innerPanel->setBrush(QBrush(Qt::yellow));
     scene->addItem(innerPanel);
+    */
+
+    QPixmap gameArea(":/Images/darkSpace.jpg");
+    QPixmap scaledGameArea = gameArea.scaled(QSize(Constant::GAME_AREA_WIDTH, Constant::GAME_AREA_HEIGHT));
+    QGraphicsPixmapItem *area = new QGraphicsPixmapItem();
+    area->setPixmap(scaledGameArea);
+    scene->addItem(area);
+
     ui->boardView->setScene(scene);
 
 
