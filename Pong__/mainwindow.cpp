@@ -36,11 +36,15 @@ MainWindow::MainWindow(QWidget *parent,int game_mode) :
     innerPanel->setBrush(QBrush(Qt::yellow));
     scene->addItem(innerPanel);
     */
+    QPixmap* gameBackGround;
+    if(g_mode == 1)
+        gameBackGround = new QPixmap(":/Images/soccerField.png");
+    else
+        gameBackGround = new QPixmap(":/Images/darkSpace.jpg");
 
-    QPixmap gameArea(":/Images/darkSpace.jpg");
-    QPixmap scaledGameArea = gameArea.scaled(QSize(Constant::GAME_AREA_WIDTH, Constant::GAME_AREA_HEIGHT));
+    QPixmap scaledGameBG = gameBackGround->scaled(QSize(Constant::GAME_AREA_WIDTH, Constant::GAME_AREA_HEIGHT));
     QGraphicsPixmapItem *area = new QGraphicsPixmapItem();
-    area->setPixmap(scaledGameArea);
+    area->setPixmap(scaledGameBG);
     scene->addItem(area);
 
     ui->boardView->setScene(scene);
