@@ -70,7 +70,6 @@ void Gameplay::tick()
     qreal pnewx = iP1->pos().x();
     qreal p2newx = iP2->pos().x();
 
-    //int gy = MyThread::gyro1;
 
      gyro1 =   MyThread::getGyro1()* 2;
      gyro2 =   MyThread::getGyro2()* 2;
@@ -160,12 +159,10 @@ void Gameplay::tick()
         detectCollusion();
     }
 
-    if ( qrand() % 10 == 0 )
-    {
-        iP2Direction = calculateP2Direction(gyro2);
-    }else if(qrand() % 7 == 0){
-        iP1Direction = calculateP1Direction(gyro1);
-    }
+    iP2Direction = calculateP2Direction(gyro2);
+    iP1Direction = calculateP1Direction(gyro1);
+
+
 
     iBall->moveBy(iBallDirection.x(), iBallDirection.y());
     iToken->moveBy(iTokenDirection.x(), iTokenDirection.y());

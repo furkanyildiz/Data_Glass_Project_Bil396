@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QBluetoothSocket>
 #include "gameplay.h"
+#include <QBluetoothServer>
 
 #define SCREEN_RATIO 2
 
@@ -28,7 +29,7 @@ static int ballY;
 
 public:
     friend Gameplay;
-    explicit MyThread(QBluetoothSocket *socket,int id,QBluetoothSocket* secondSocket);
+    explicit MyThread(QString bluetoothmac,int id);
     void run();
     int thread_id = 0;
     static int getGyro1() {return gyro1;}
@@ -43,10 +44,16 @@ public:
 public slots:
     void readWrite();
     void disconnected();
+    void clientConnected();
+
+signals:
+    void clientConnected(const QString &name);
 
 private:
     QBluetoothSocket *socket;
-    QBluetoothSocket* secondSocket;
+    QBluetoothServer *rfcommServer;
+    QString bluetoothmac;
+
 };
 
 #endif // MYTHREAD_H

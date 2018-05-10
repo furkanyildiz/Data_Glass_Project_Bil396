@@ -36,14 +36,23 @@ void MyThread::setBallY(int value)
     ballY = value;
 }
 
-MyThread::MyThread(QBluetoothSocket *socket,int id,QBluetoothSocket* secondSocket)
+MyThread::MyThread(QString bluetoothmac,int id)
 {
     this->thread_id = id;
-    this->socket = socket;
-    this->secondSocket = secondSocket;
+    this->bluetoothmac = bluetoothmac;
+
 
 }
+/*
+    static const QString serviceUuid(QStringLiteral("00001101-0000-1000-8000-00805F9B34FB"));
+    static const QString serviceUuid2(QStringLiteral("00001101-0000-1000-8000-00805F9B34FB"));
 
+    socket2 = new QBluetoothSocket(QBluetoothServiceInfo::RfcommProtocol);
+    socket2->connectToService(QBluetoothAddress("98:D3:32:10:7D:B0"), QBluetoothUuid(serviceUuid), QIODevice::ReadWrite);
+
+
+
+  */
 void MyThread::run()
 {
     qDebug() << "THREAD RUNNING";/*
@@ -54,27 +63,47 @@ void MyThread::run()
     std::string f = std::to_string(a);*/
     sleep(5);
     //while(1){
+/*
+    rfcommServer = new QBluetoothServer(QBluetoothServiceInfo::RfcommProtocol, this);
+    connect(rfcommServer, SIGNAL(newConnection()), this, SLOT(clientConnected()));
+*/
+
+    static const QString serviceUuid(QStringLiteral("00001101-0000-1000-8000-00805F9B34FB"));
+    socket = new QBluetoothSocket(QBluetoothServiceInfo::RfcommProtocol);
+    socket->connectToService(QBluetoothAddress(bluetoothmac), QBluetoothUuid(serviceUuid), QIODevice::ReadWrite);
+
+
 
     connect(socket, SIGNAL(readyRead()), this, SLOT(readWrite()),Qt::DirectConnection);
     connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()),Qt::DirectConnection);
 
-    //std::cout << f.c_str() << std::endl;
-    //socket->write(f.c_str());
-    //socket->write(std::to_string(a)+","+std::to_string(b)+","+std::to_string(c)+","+std::to_string(d));
-    //sleep(1);
+
+    exec();
+
 
     /*
-        if(socket->isReadable()){
-            rec = socket->read(2);
-            qDebug() <<  rec;
-            rec.clear();
-            socket->write("1");
-        }*/
-
-    //}
-    // make this thread a loop
-    exec();
+   const QBluetoothAddress &localAdapter = QBluetoothAddress();
+   bool result = rfcommServer->listen(localAdapter);
+   while (!result) {
+       connect(rfcommServer, SIGNAL(newConnection()), this, SLOT(clientConnected()));
+   }
+  */
 }
+
+void MyThread::clientConnected()
+{
+    socket = rfcommServer->nextPendingConnection();
+    if (!socket)
+        return;
+
+    connect(socket, SIGNAL(readyRead()), this, SLOT(readWrite()),Qt::DirectConnection);
+    connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()),Qt::DirectConnection);
+
+//    clientSockets.append(socket);
+    emit clientConnected(socket->peerName());
+}
+
+
 void MyThread::readWrite()
 {
     QByteArray q_b;/*
@@ -118,7 +147,7 @@ void MyThread::readWrite()
             socket->write(q_b);
 
             qDebug() <<"Sent top x: "<<infos.topx << " top y: " << infos.topy;
-
+/*
             //topx
             if(infos.topx <10)
                 socket->write(zero);
@@ -138,7 +167,7 @@ void MyThread::readWrite()
             }
             q_b.setNum(infos.topy);
             socket->write(q_b);
-
+*/
         }
 
 
