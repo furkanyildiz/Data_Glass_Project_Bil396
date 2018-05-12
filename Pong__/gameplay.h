@@ -25,12 +25,23 @@ signals:
     void goal(int player);
 
 private slots:
-    void tick();
+    void pong_tick();
+    void arkanoid_tick();
 
 private:
+    void check_pong_winner(int player);
+    void check_arkanoid_winner();
+    void check_blocks();
+    void set_pong();
+    void set_arkanoid();
     qreal calculateP2Direction(int client_data);
     qreal calculateP1Direction(int client_data);
-      int data=5;
+    int data = 5;
+    int control = 0;
+    int p1Score = 0;
+    int p2Score = 0;
+    int block_count = 0;
+    bool game_over = false;
 private:
     QGraphicsScene & iScene;
     QGraphicsItem  *iBall, *iToken;

@@ -29,17 +29,20 @@ SOURCES +=  main.cpp\
             gameplay.cpp \
             menu.cpp\
             server.cpp \
-    mythread.cpp
+    mythread.cpp \
+    resultwindow.cpp
 
 HEADERS  += mainwindow.h \
             gameplay.h \
             menu.h\
     server.h \
     mythread.h \
-    constants.h
+    constants.h \
+    resultwindow.h
 
 FORMS    += mainwindow.ui\
-            menu.ui
+            menu.ui \
+    resultwindow.ui
 
 RESOURCES += \
     resources.qrc

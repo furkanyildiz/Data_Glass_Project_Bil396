@@ -25,6 +25,8 @@ private slots:
     void addScore(int count);
 
 private:
+    void set_pong();
+    void set_arkanoid();
     Ui::MainWindow *ui;
     Gameplay *iLoop;
     int g_mode;

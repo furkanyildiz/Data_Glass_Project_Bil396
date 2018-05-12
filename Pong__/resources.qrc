@@ -2,5 +2,10 @@
     <qresource prefix="/Images">
         <file>soccerField.png</file>
         <file>darkSpace.jpg</file>
+        <file>player1wins.png</file>
+        <file>player2wins.png</file>
+        <file>lose.png</file>
+        <file>win.png</file>
+        <file>earth.gif</file>
     </qresource>
 </RCC>

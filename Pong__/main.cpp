@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     //MainWindow w;
     Menu menu;
     //w.setWindowState(Qt::WindowMaximized);
-    //w.setWindowTitle("Pong");
+    menu.setWindowTitle("Main menu");
     //w.show();
     menu.show();
 

@@ -56,18 +56,17 @@ void Menu::on_listWidget_2_itemClicked(QListWidgetItem *item)
     if(ui->listWidget_2->item(0) == item) {
         cout << "PONG" << endl;
         MainWindow *w = new MainWindow;
-
+        w->setWindowTitle("Pong");
         w->show();
+        //this->close();
 
-        this->close();
     }else if(ui->listWidget_2->item(1) == item){
-       cout << "ARKANOID" << endl;
-       QWidget *p1 = NULL;
-       MainWindow *w = new MainWindow(p1,2);
-
+        cout << "ARKANOID" << endl;
+        QWidget *p1 = NULL;
+        MainWindow *w = new MainWindow(p1,2);
+        w->setWindowTitle("Arkanoid");
         w->show();
-
-        this->close();
+        //this->close();
     }
 }
 
