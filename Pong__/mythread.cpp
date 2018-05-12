@@ -146,6 +146,7 @@ void MyThread::readWrite()
             socket->write(q_b);
 
             qDebug() <<"Sent top x: "<<infos.topx << " top y: " << infos.topy;
+
 /*
             //topx
             if(infos.topx <10)
