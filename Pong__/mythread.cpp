@@ -115,9 +115,8 @@ void MyThread::readWrite()
     while (socket->canReadLine()) {
         QByteArray line = socket->readLine().trimmed();
 
-        if(i<50)
-            qDebug() << " This message receiving from data glass : " << this->thread_id << line;
-        i+=1;
+        qDebug() << " This message receiving from data glass : " << this->thread_id << line;
+
         //secondSocket->write(line);
         if (thread_id == 1){
             gyro1 = line.toInt();
