@@ -7,8 +7,8 @@
 #include <QMainWindow>
 #include <mainwindow.h>
 
-#define PORTNUMBER 1234
-#define IPADDRESS "192.168.1.26"
+#define PORTNUMBER 8081
+#define IPADDRESS "192.168.1.34"
 
 class QLabel;
 class QTcpServer;

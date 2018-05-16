@@ -62,8 +62,8 @@ void MyThread::readWrite()
     qDebug()<<"READY READ AND WRITE";
     QByteArray recData = socket->readAll();
 
-    //qDebug() << socketDescriptor << " This message receiving from data glass : ";
-    std::printf(" This message receiving from data glass : %d \n" , std::atoi(recData.data()));
+    qDebug() << socketDescriptor << " This message receiving from data glass : " << recData;
+//    std::printf(" This message receiving from data glass : %d \n" , std::atoi(recData.data()));
     gyro1 = std::atoi(recData.data());
 
     QByteArray sendData;
@@ -76,7 +76,12 @@ void MyThread::readWrite()
     */
     sendData.insert(0,str.toLocal8Bit());
 
-    socket->write(sendData);
+//    socket->write(sendData);
+
+    QString sendMessage = "1234;56;789;0;12";
+    QByteArray sendByte = sendMessage.toUtf8() ;
+    socket->write(sendByte);
+
 
 }
 
