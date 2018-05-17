@@ -13,7 +13,4 @@
         <file>gulenyildiz.gif</file>
         <file>meksika.gif</file>
     </qresource>
-    <qresource prefix="/">
-        <file>main.qml</file>
-    </qresource>
 </RCC>
