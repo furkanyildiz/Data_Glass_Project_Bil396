@@ -32,9 +32,8 @@ Server::Server(QWidget *parent, MainWindow *mWindow)
     } else {
         sessionOpened();
     }
-
-    connect(tcpServer, &QTcpServer::newConnection, this, &Server::readWrite);
     playerNumber = 1;
+    connect(tcpServer, &QTcpServer::newConnection, this, &Server::readWrite);
 }
 
 void Server::sessionOpened()
@@ -81,10 +80,40 @@ void Server::sessionOpened()
 
 void Server::readWrite()
 {
-    MyThread *thread = new MyThread(tcpServer->socketDescriptor(), this, tcpServer);
+    MyThread *thread = new MyThread(tcpServer->socketDescriptor(),playerNumber, this, tcpServer);
+    playerNumber++;
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     thread->start();
 
+    /*
+    QByteArray block;
+    QDataStream out(&block, QIODevice::ReadWrite);
+    out.setVersion(QDataStream::Qt_5_10);
+
+    out << "This message sending from data glass.";
+
+
+    QTcpSocket *clientConnection = tcpServer->nextPendingConnection();
+    connect(clientConnection, &QAbstractSocket::disconnected,
+            clientConnection, &QObject::deleteLater);
+
+    clientConnection->write(block);
+
+    block.clear();
+
+    while((clientConnection->state() == QTcpSocket::ConnectedState)){
+        clientConnection->waitForReadyRead();
+        block.clear();
+        block = clientConnection->readAll();
+        qDebug() << " Client message is : " << block.data();
+
+    }
+    clientConnection->disconnectFromHost();
+
+    qDebug() << "Client disconnected";
+
+    qDebug() << "Glass connected\n";
+    */
     mainWindow->addPlayer(playerNumber);
     playerNumber++;
 }

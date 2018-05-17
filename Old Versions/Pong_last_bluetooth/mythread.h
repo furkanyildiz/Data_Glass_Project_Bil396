@@ -10,9 +10,9 @@
 
 typedef struct informations
 {
-    u_int16_t gyro;
-    u_int16_t topx;
-    u_int16_t topy;
+    uint16_t gyro;
+    uint16_t topx;
+    uint16_t topy;
 }informations;
 
 class MyThread : public QThread

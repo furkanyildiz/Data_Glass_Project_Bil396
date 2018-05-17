@@ -7,39 +7,17 @@
 #include "mythread.h"
 
 
-QByteArray data1;
-QByteArray data2;
-int MyThread::gyro1 = 30;
-int MyThread::gyro2 = 30;
-int MyThread::ballX = 30;
-int MyThread::ballY = 60;
 
+shared_values MyThread::shared = {0,0,0,0,0,0,0,0,0,0,0};
 
-int MyThread::getBallX()
-{
-    return ballX;
-}
-
-void MyThread::setBallX(int value)
-{
-    ballX = value;
-}
-
-int MyThread::getBallY()
-{
-    return ballY;
-}
-
-void MyThread::setBallY(int value)
-{
-    ballY = value;
-}
-
-MyThread::MyThread(int ID, QObject *parent,QTcpServer *server) :
+MyThread::MyThread(int ID, int thread_id, QObject *parent,QTcpServer *server) :
     QThread(parent),
     tcpServer(server)
 {
     this->socketDescriptor = ID;
+    this->thread_id = thread_id;
+    shared.connected_glasses_count++;
+    qDebug()<< "Connected glasses: "<<shared.connected_glasses_count;
 }
 
 void MyThread::run()
@@ -55,32 +33,98 @@ void MyThread::run()
 
     // make this thread a loop
     exec();
+
+
 }
 
 void MyThread::readWrite()
 {
+    /*
     qDebug()<<"READY READ AND WRITE";
     QByteArray recData = socket->readAll();
 
     qDebug() << socketDescriptor << " This message receiving from data glass : " << recData;
-//    std::printf(" This message receiving from data glass : %d \n" , std::atoi(recData.data()));
-    gyro1 = 20 * std::atoi(recData.data());
-
-    QByteArray sendData;
-    sendData.fill(0, 160);
-    QString str = "This message sending from server : " + recData;
-    /*
-    sendData.insert(0, str.toLocal8Bit());
-    sendData.insert(80,recData);
-    sendData.resize(160);
-    */
-    sendData.insert(0,str.toLocal8Bit());
-
-//    socket->write(sendData);
 
     QString sendMessage = "1234;56;789;0;12";
     QByteArray sendByte = sendMessage.toUtf8() ;
     socket->write(sendByte);
+*/
+
+    QByteArray q_b;
+
+    /*
+    QBluetoothSocket *socket = qobject_cast<QBluetoothSocket *>(sender()); //silincede calısıyor.
+    if (!socket)
+        return;
+    */
+
+    std::string data = "";
+   // while (socket->canReadLine()) {
+        data = "";
+       QByteArray line =  socket->readAll();
+
+
+        qDebug() << " This message receiving from data glass : " << this->thread_id << line;
+
+        if (thread_id == 1){
+            shared.gyro1 = line.toInt();
+            infos.gyro = shared.gyro2;
+
+        }
+        if (thread_id == 2){
+            shared.gyro2 = line.toInt();
+            infos.gyro = shared.gyro1;
+        }
+        infos.topx = shared.mainBallX / SCREEN_RATIO;
+        infos.topy = shared.mainBallY / SCREEN_RATIO;
+
+        if(socket->bytesToWrite()==0 && socket->isWritable()){
+
+            q_b.clear();
+            if (infos.gyro <10 )
+                data+="0";
+
+            std::string tempp = std::to_string(infos.gyro);
+            data+=tempp;
+
+            //topx
+            data+=";";
+
+            if(infos.topx <10)
+                data+="0";
+
+            tempp = std::to_string(infos.topx);
+            data+=tempp;
+
+
+             //topy
+
+            data+=";";
+            if(infos.topy <10)
+                data+="00";
+
+            else if(infos.topy <100)
+                data+="0";
+
+            tempp = std::to_string(infos.topy);
+            data+=tempp;
+
+            //yollama formatına cevir ve yolla
+            QString data_to_write = QString::fromStdString(data);
+            q_b = data_to_write.toUtf8();
+            socket->write(q_b);
+            qDebug() << "string:" << data_to_write ;
+            qDebug() << "Sent string as bytes:" << q_b ;
+
+            qDebug() <<"Sent top x: "<<infos.topx << " top y: " << infos.topy;
+
+
+        }
+
+
+
+    //}
+
 
 }
 
@@ -90,3 +134,54 @@ void MyThread::disconnected()
     socket->deleteLater();
     exit(0);
 }
+//int MyThread::getGyro1()
+//{
+//    return gyro1;
+//}
+
+//void MyThread::setGyro1(int value)
+//{
+//    gyro1 = value;
+//}
+
+//int MyThread::getGyro2()
+//{
+//    return gyro2;
+//}
+
+//void MyThread::setGyro2(int value)
+//{
+//    gyro2 = value;
+//}
+//int MyThread::getBallX()
+//{
+//    return ballX;
+//}
+
+//void MyThread::setBallX(int value)
+//{
+//    ballX = value;
+//}
+
+//int MyThread::getBallY()
+//{
+//    return ballY;
+//}
+
+//void MyThread::setBallY(int value)
+//{
+//    ballY = value;
+//}
+
+//void MyThread::setSecondBallX(int x){
+//    second_ballX = x;
+//}
+//int MyThread::getSecondBallX(){
+//    return second_ballX;
+//}
+//void MyThread::setSecondBallY(int y){
+//    second_ballY = y;
+//}
+//int MyThread::getSecondBallY(){
+//    return second_ballY;
+//}

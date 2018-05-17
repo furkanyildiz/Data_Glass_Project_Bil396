@@ -1,4 +1,4 @@
-#ifndef MYTHREAD_H
+﻿#ifndef MYTHREAD_H
 #define MYTHREAD_H
 
 #include <QThread>
@@ -7,9 +7,9 @@
 #include <QDebug>
 #include "gameplay.h"
 
+#define SCREEN_RATIO 4
 
-#define SCREEN_RATIO 2
-
+//These struct between raspberry and server.
 typedef struct informations
 {
     uint16_t gyro;
@@ -17,38 +17,49 @@ typedef struct informations
     uint16_t topy;
 }informations;
 
+//server ile gameplay arasındaki struct.
+struct shared_values{
+    int connected_glasses_count;
+    int gyro1;
+    int gyro2;
+    int mainBallX; //Oyundaki topun koordinatı
+    int mainBallY; //Oyundaki topun koordinatı
+    int second_ballX; //Oyuna ikinci top dahil olduğunda onun koordinatı
+    int second_ballY; //Oyuna ikinci top dahil olduğunda onun koordinatı
+    int square_X; //Oyunda gezen karenin koordinatı
+    int square_Y; //Oyunda gezen karenin koordinatı
+    int item_X;  //İkinci topun oyuna dahil olması için çıkan karenin koordinatı
+    int item_Y;  //İkinci topun oyuna dahil olması için çıkan karenin koordinatı
+};
+
 class MyThread : public QThread
 {
     Q_OBJECT
 
-static int gyro1;
-static int gyro2;
-static int ballX;
-static int ballY;
+    static struct shared_values shared;
 
 public:
     friend Gameplay;
-    int thread_id = 0;
-    informations infos;
-    explicit MyThread(int iID, QObject *parent = 0,QTcpServer *server=0);
+
+
+    explicit MyThread(int iID, int thread_id, QObject *parent = 0,QTcpServer *server=0);
     void run();
-    static int getGyro1() {return gyro1;}
-    static int getGyro2() {return gyro2;}    
-    static int getBallX();
-    static void setBallX(int value);
-    static int getBallY();
-    static void setBallY(int value);
+
+signals:
+    void error(QTcpSocket::SocketError socketerror);
 
 public slots:
     void readWrite();
     void disconnected();
 
-signals:
+public slots:
 
 private:
     QTcpSocket *socket;
     int socketDescriptor;
     QTcpServer *tcpServer = nullptr;
+    informations infos;
+    int thread_id;
 };
 
 #endif // MYTHREAD_H
