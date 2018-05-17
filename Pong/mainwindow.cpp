@@ -12,6 +12,8 @@
 #include "resultwindow.h"
 #include <iostream>
 #include <QMovie>
+#include <QThread>
+#include <QTime>
 
 MainWindow::MainWindow(QWidget *parent,int game_mode) :
     QMainWindow(parent),
@@ -33,6 +35,9 @@ MainWindow::MainWindow(QWidget *parent,int game_mode) :
     QGraphicsEllipseItem *ball = new QGraphicsEllipseItem(0, 0, Constant::BALL_RAD, Constant::BALL_RAD);
     ball->setBrush(QBrush(Qt::magenta));
 
+    QGraphicsEllipseItem *ball2 = new QGraphicsEllipseItem(0, 0, Constant::BALL_RAD, Constant::BALL_RAD);
+    ball2->setBrush(QBrush(Qt::cyan));
+
     QGraphicsRectItem *token = new QGraphicsRectItem(0, 0, 5, 5);
     token->setBrush(QBrush(Qt::black));
 
@@ -41,14 +46,24 @@ MainWindow::MainWindow(QWidget *parent,int game_mode) :
     scene->addItem(innerPanel);
     */
     QPixmap* gameBackGround;
+    QPixmap* goalBackGround;
+
     if(g_mode == 1)
         gameBackGround = new QPixmap(":/Images/soccerField.png");
     else
         gameBackGround = new QPixmap(":/Images/darkSpace.jpg");
 
+    goalBackGround = new QPixmap(":/Images/goalscreen.jpg");
     QPixmap scaledGameBG = gameBackGround->scaled(QSize(Constant::GAME_AREA_WIDTH, Constant::GAME_AREA_HEIGHT));
-    QGraphicsPixmapItem *area = new QGraphicsPixmapItem();
+    area = new QGraphicsPixmapItem();
     area->setPixmap(scaledGameBG);
+
+
+    QPixmap goalscaledGameBG = goalBackGround->scaled(QSize(Constant::GAME_AREA_WIDTH, Constant::GAME_AREA_HEIGHT));
+    goalarea = new QGraphicsPixmapItem();
+    goalarea->setPixmap(goalscaledGameBG);
+
+    scene->addItem(goalarea);
     scene->addItem(area);
 
     ui->boardView->setScene(scene);
@@ -60,9 +75,9 @@ MainWindow::MainWindow(QWidget *parent,int game_mode) :
     }
 
     if(g_mode==1)
-        iLoop = new Gameplay(*scene, p1, p2, ball,g_mode, token, this); // GamePlay objesi oluşturuldu. Oyunu bu yönetir.
+        iLoop = new Gameplay(*scene, p1, p2, ball,g_mode, token, this, ball2); // GamePlay objesi oluşturuldu. Oyunu bu yönetir.
     else{
-        iLoop = new Gameplay(*scene, p1, p2, ball,g_mode, token, this);
+        iLoop = new Gameplay(*scene, p1, p2, ball,g_mode, token, this, ball2);
     }
     QSize m(scene->sceneRect().size().width()+5, scene->sceneRect().size().height()+5);
 
@@ -95,6 +110,15 @@ void MainWindow::set_arkanoid(){
 
 void MainWindow::addScore(int count)
 {
+//    if(g_mode == 1 && count == 10){
+
+//        QTime dieTime= QTime::currentTime().addSecs(2);
+//        while (QTime::currentTime() < dieTime);
+
+//        std::cout << "normal ekrani geri getiriyor" << std::endl;
+//        goalarea->setVisible(false);
+//        area->setVisible(true);
+//    }
     if(g_mode == 2 && count == 1){ // arkanoid loses
         ++P1iScore;
         ui->playerScore->display(P1iScore);
@@ -135,21 +159,32 @@ void MainWindow::addScore(int count)
             ui->status->setText("P2 leads the game");
         }
 
-        if(P1iScore == 3){
+        if(P1iScore == 5){
             ResultWindow *who_won = new ResultWindow(NULL, 1, 1);
             who_won->show();
             this->close();
-        }else if(P2iScore == 3){
+        }else if(P2iScore == 5){
             ResultWindow *who_won = new ResultWindow(NULL, 2, 1);
             who_won->show();
             this->close();
         }
+        //gol ekranini aciyor
+//        if(count != 10){
+//            std::cout << "gol ekrani geldi" << std::endl;
+//            area->setVisible(false);
+//            goalarea->setVisible(true);
+//        }
+
+
+
         QTimer::singleShot(500, ui->showGoal, &QLabel::hide);
 
-        QMovie *movie = new QMovie(":/Images/earth.gif");
+        QMovie *movie = new QMovie(":/Images/meksika.gif");
+
         //QLabel *processLabel = new QLabel(this);
-        movie->setScaledSize(QSize(50,50));
+        movie->setScaledSize(QSize(200,50));
         ui->goalScreen->setMovie(movie);
+
         movie->start();
         QTimer::singleShot(1500, ui->goalScreen, &QLabel::hide);
         ui->goalScreen->setVisible(true);

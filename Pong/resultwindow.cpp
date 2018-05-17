@@ -4,6 +4,8 @@
 #include "constants.h"
 #include <QGraphicsPixmapItem>
 #include <iostream>
+#include <QLabel>
+#include <QMovie>
 
 ResultWindow::ResultWindow(QWidget *parent, int player_no, int game_mode) :
     QDialog(parent),
@@ -17,22 +19,41 @@ ResultWindow::ResultWindow(QWidget *parent, int player_no, int game_mode) :
     QPixmap* player_win_photo;
 
     // kazanan oyuncuya gore fotoyu aliyor
-    if(player_no == 1 && game_mode == 1)
+    if(player_no == 1 && game_mode == 1){ // player1 kazandi
         player_win_photo = new QPixmap(":/Images/player1wins.png");
-    else if(player_no == 1 && game_mode == 1)
+        QPixmap scaledGameBG = player_win_photo->scaled(QSize(Constant::GAME_AREA_WIDTH, Constant::GAME_AREA_HEIGHT/4));
+        QGraphicsPixmapItem *area = new QGraphicsPixmapItem();
+        area->setPixmap(scaledGameBG);
+        scene->addItem(area);
+    }else if(player_no == 2 && game_mode == 1){ // player2 kazandi
         player_win_photo = new QPixmap(":/Images/player2wins.png");
-    else if(player_no == 1 && game_mode == 2)
-        player_win_photo = new QPixmap(":/Images/lose.png");
-    else if(player_no == 2 && game_mode == 2)
-        player_win_photo = new QPixmap(":/Images/win.png");
+        QPixmap scaledGameBG = player_win_photo->scaled(QSize(Constant::GAME_AREA_WIDTH, Constant::GAME_AREA_HEIGHT/4));
+        QGraphicsPixmapItem *area = new QGraphicsPixmapItem();
+        area->setPixmap(scaledGameBG);
+        scene->addItem(area);
+    }else if(player_no == 1 && game_mode == 2){ //arkanoid kaybetti
+        QMovie *movie = new QMovie(":/Images/aglayanyildiz.gif");
+        movie->setScaledSize(QSize(430,300));
+        QLabel *processLabel = new QLabel(this);
+        processLabel->setMovie(movie);
+        movie->start();
 
-    QPixmap scaledGameBG = player_win_photo->scaled(QSize(Constant::GAME_AREA_WIDTH/4, Constant::GAME_AREA_HEIGHT/4));
-    QGraphicsPixmapItem *area = new QGraphicsPixmapItem();
-    area->setPixmap(scaledGameBG);
-    scene->addItem(area);
+        processLabel->setGeometry(10, 10, 380, 250);
+        processLabel->setAlignment(Qt::AlignCenter);
+        scene->addWidget(processLabel);
+    }else if(player_no == 2 && game_mode == 2){ // arkanoid kazandi
+        QMovie *movie = new QMovie(":/Images/gulenyildiz.gif");
+        movie->setScaledSize(QSize(430,320));
+        QLabel *processLabel = new QLabel(this);
+        processLabel->setMovie(movie);
+        movie->start();
 
+        processLabel->setGeometry(10, 10, 380, 250);
+        processLabel->setAlignment(Qt::AlignCenter);
+        scene->addWidget(processLabel);
+
+    }
     ui->winner_view->setScene(scene);
-
 }
 
 

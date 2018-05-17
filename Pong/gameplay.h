@@ -17,7 +17,7 @@ class Gameplay : public QObject
     Q_OBJECT // bu macro meta-obje içeren tüm classlarda bulunmalı,q
 
 public:
-    explicit Gameplay(QGraphicsScene & scene, QGraphicsRectItem *p1, QGraphicsRectItem *p2, QGraphicsItem *ball,int gameMode, QGraphicsItem *token,QObject *parent);
+    explicit Gameplay(QGraphicsScene & scene, QGraphicsRectItem *p1, QGraphicsRectItem *p2, QGraphicsItem *ball,int gameMode, QGraphicsItem *token,QObject *parent, QGraphicsItem *ball2);
 protected:
     virtual bool eventFilter(QObject *, QEvent *);
 
@@ -44,16 +44,20 @@ private:
     bool game_over = false;
 private:
     QGraphicsScene & iScene;
-    QGraphicsItem  *iBall, *iToken;
+    QGraphicsItem  *iBall, *iToken, *iBall_2;
+    QGraphicsRectItem *left_side;
     QGraphicsRectItem *blocks[8], *iP1 , *iP2;
     bool block_state[8];
+    bool side_state = true;
     void setBlocks();
     void detectCollusion();
+    void detectSideCollusion();
     int defaultP2Size=60;
     QTimer *iTimer;
     qreal orgin1=30;
     qreal orgin2=30;
     QPointF iBallDirection;
+    QPointF iBall2Direction;
     QPointF iTokenDirection;
     qreal iP1Direction;
     qreal iP2Direction;

@@ -58,7 +58,7 @@ void Menu::on_listWidget_2_itemClicked(QListWidgetItem *item)
         MainWindow *w = new MainWindow;
         w->setWindowTitle("Pong");
         w->show();
-        //this->close();
+        this->close();
 
     }else if(ui->listWidget_2->item(1) == item){
         cout << "ARKANOID" << endl;
@@ -66,7 +66,7 @@ void Menu::on_listWidget_2_itemClicked(QListWidgetItem *item)
         MainWindow *w = new MainWindow(p1,2);
         w->setWindowTitle("Arkanoid");
         w->show();
-        //this->close();
+        this->close();
     }
 }
 

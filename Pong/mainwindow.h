@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <string>
 #include "constants.h"
-
+#include <QGraphicsPixmapItem>
 class Gameplay;
 class Server;
 
@@ -29,6 +29,8 @@ private:
     void set_arkanoid();
     Ui::MainWindow *ui;
     Gameplay *iLoop;
+    QGraphicsPixmapItem *goalarea;
+    QGraphicsPixmapItem *area;
     int g_mode;
     int iScore;
     int P1iScore;

@@ -8,19 +8,22 @@
 #include <math.h>
 #include"mythread.h"
 #include "resultwindow.h"
+#include <QtMath>
 
 int x_pos_of_ball;
 int y_pos_of_ball;
 
-Gameplay::Gameplay(QGraphicsScene & scene, QGraphicsRectItem *p1, QGraphicsRectItem *p2, QGraphicsItem *ball,int gameMode, QGraphicsItem *token, QObject *parent) :
+Gameplay::Gameplay(QGraphicsScene & scene, QGraphicsRectItem *p1, QGraphicsRectItem *p2, QGraphicsItem *ball,int gameMode, QGraphicsItem *token, QObject *parent, QGraphicsItem *ball2) :
     QObject(parent),
     iScene ( scene ),
     iP1 ( p1 ),
     iP2 ( p2 ),
     iBall ( ball ),
     iToken ( token ),
+    iBall_2 (ball2),
     iTokenDirection(+1, -1),
-    iBallDirection ( -3, -3 ), //ilk anda topun hareket yönü
+    iBallDirection ( -3,-3), //ilk anda topun hareket yönü
+    iBall2Direction(0, 0),
     iP1Direction( 0 ),
     iP2Direction( 0 )
 {
@@ -50,7 +53,7 @@ void Gameplay::set_arkanoid(){
     iBall->setPos(Constant::GAME_AREA_WIDTH/2, Constant::GAME_AREA_HEIGHT/2);
 
     iTimer = new QTimer(this);
-    iTimer->setInterval(5);
+    iTimer->setInterval(10);
     iTimer->start();
 
 
@@ -70,6 +73,11 @@ void Gameplay::set_pong(){
     // iP2->setRect(0,0,Constant::PLAYER2_WIDTH, Constant::PLAYER2_HEIGHT);
     iScene.addItem(iP2);
     iScene.addItem(iBall);
+    left_side =new QGraphicsRectItem(0, 0, Constant::BLOCK_HEIGHT - 10, Constant::BLOCK_WIDTH + 6);
+
+    iScene.addItem(left_side);
+    left_side->setBrush(QBrush(Qt::red));
+    left_side->setPos(Constant::GAME_AREA_WIDTH - 6, Constant::GAME_AREA_HEIGHT/2 - 20);
 
 
     iP2->setPos(Constant::PLAYER2_POS_X, Constant::PLAYER2_POS_Y-8);
@@ -107,9 +115,9 @@ void Gameplay::check_blocks(){
 
 void Gameplay::arkanoid_tick(){
 
-//    if(game_over == true){
-//        return;
-//    }
+    if(game_over == true){
+        return;
+    }
 
     check_blocks();
 
@@ -131,7 +139,7 @@ void Gameplay::arkanoid_tick(){
         iBallDirection.rx() *= -1;
     }
 
-    if ( ( newY < 0 ) || ( newY + iBall->boundingRect().bottom() > iScene.sceneRect().bottom() ) )
+    if (game_over == true || ( newY < 0 ) || ( newY + iBall->boundingRect().bottom() > iScene.sceneRect().bottom() ) )
     {
         // 1 for hitting the bottom wall, -1 for hitting the top wall
         if(newY > 0){
@@ -192,6 +200,9 @@ void Gameplay::pong_tick(){
     qreal newX = iBall->pos().x() + iBallDirection.x();
     qreal newY = iBall->pos().y() + iBallDirection.y();
 
+    qreal newX2 = iBall_2->pos().x() + iBall2Direction.x();
+    qreal newY2 = iBall_2->pos().y() + iBall2Direction.y();
+
     qreal newTokenX= iToken->pos().x()+iTokenDirection.x();
     qreal newTokenY = iToken->pos().y()+iTokenDirection.y();
 
@@ -212,27 +223,96 @@ void Gameplay::pong_tick(){
         iBallDirection.rx() *= -1;
     }
 
+    if ( ( newX2 < 0 ) || ( newX2 + iBall_2->boundingRect().right() > iScene.sceneRect().right() ) )
+    {
+        iBall2Direction.rx() *= -1;
+    }
+
     if ( ( newY < 0 ) || ( newY + iBall->boundingRect().bottom() > iScene.sceneRect().bottom() ) )
     {
         // 1 for hitting the bottom wall, -1 for hitting the top wall
         if(newY < 0){
             p2Score++;
             std::cout << "player2" << " : " << p2Score << std::endl;
-            if(p2Score == 3){
+            if(p2Score == 15){
                 check_pong_winner(2); // player 2 kazandi
             }
         }else{
             p1Score++;
             std::cout << "player1" << " : " << p1Score << std::endl;
-            if(p1Score == 3){
+            if(p1Score == 15){
                 check_pong_winner(1); // player 1 kazandi
             }
         }
 
         emit goal(newY / fabs(newY));
+
+        iBall->setPos(Constant::GAME_AREA_WIDTH/2, Constant::GAME_AREA_HEIGHT/2);
+        iToken->setVisible(true);
+        iToken->setPos(Constant::GAME_AREA_WIDTH/2, Constant::GAME_AREA_HEIGHT/2);
+        iTokenDirection.rx() = 2;
+        iTokenDirection.ry() = -2;
+        iTokenDirection *= -1;
+
+        iP2->setRect(0,0,Constant::PLAYER2_WIDTH, Constant::PLAYER2_HEIGHT);
+        iP1->setRect(0,0,Constant::PLAYER2_WIDTH, Constant::PLAYER2_HEIGHT);
+
+        iBall_2->setPos(0, 0);
+        iBall_2->setVisible(false);
+        iBall2Direction.ry() = 0;
+        iBall2Direction.rx() = 0;
         iBallDirection.ry() *= -1;
+
+
+
+        // ekrani eski haline getirmke icin
+       // emit goal(10);
+
+        iScene.addItem(left_side);
+        side_state = true;
+
     }
 
+    if ( ( newY2 < 0 ) || ( newY2 + iBall_2->boundingRect().bottom() > iScene.sceneRect().bottom() ) )
+    {
+        // 1 for hitting the bottom wall, -1 for hitting the top wall
+        if(newY2 < 0){
+            p2Score++;
+            std::cout << "player2" << " : " << p2Score << std::endl;
+            if(p2Score == 15){
+                check_pong_winner(2); // player 2 kazandi
+            }
+        }else{
+            p1Score++;
+            std::cout << "player1" << " : " << p1Score << std::endl;
+            if(p1Score == 15){
+                check_pong_winner(1); // player 1 kazandi
+            }
+        }
+
+        emit goal(newY2 / fabs(newY2));
+        iBall->setPos(Constant::GAME_AREA_WIDTH/2, Constant::GAME_AREA_HEIGHT/2);
+        iToken->setVisible(true);
+        iToken->setPos(Constant::GAME_AREA_WIDTH/2, Constant::GAME_AREA_HEIGHT/2);
+        iTokenDirection.rx() = 2;
+        iTokenDirection.ry() = -2;
+        iTokenDirection *= -1;
+
+        iP2->setRect(0,0,Constant::PLAYER2_WIDTH, Constant::PLAYER2_HEIGHT);
+        iP1->setRect(0,0,Constant::PLAYER2_WIDTH, Constant::PLAYER2_HEIGHT);
+
+        iBall_2->setPos(0, 0);
+        iBall_2->setVisible(false);
+        iBall2Direction.ry() = 0;
+        iBall2Direction.rx() = 0;
+
+        iBallDirection.ry() *= -1;
+
+        iScene.addItem(left_side);
+        side_state = true;
+    }
+
+    detectSideCollusion();
     if ( ( pnewx < 0 ) || ( pnewx + iP1->boundingRect().right() > iScene.sceneRect().right() ) )
     {
         iP1Direction = 0;
@@ -247,8 +327,43 @@ void Gameplay::pong_tick(){
     if ( ( iP2->collidesWithItem(iBall) ) && ( iBallDirection.y() > 0 ))
     {
         iBallDirection.ry() *= -1;
+        // topun sekmesini degistiren yer
 
+        int ball_x = iBall->x();
+        int p2_x = iP2->pos().rx();
+        std::cout << "iball = " << ball_x << std::endl;
+        std::cout << "p2 = " << p2_x << std::endl;
+        if (qFabs(iBall->pos().rx() - iP2->pos().rx()) < 30) {
+            std::cout << "Hey left " << std::endl;
+        } else if (qFabs(iBall->pos().rx() - iP2->pos().rx()) > 90) {
+            std::cout << "Hey right " << std::endl;
+        }else {
+            std::cout << "middle" << std::endl;
+        }
+        // sagdan gelip raketin sagina carptiysa saga sekecek
+//        if(ball_x > p2_x && ball_x < p2_x + Constant::PLAYER2_WIDTH/5){ // player1_width ikiye bolunmesi lazim. suan mainwindowsta *2
+//            std::cout << "sag taraftan carpti" << std::endl;
+//            if(iBallDirection.rx() < 1){
+//                iBallDirection.rx() *= -1;
+//            }
+//        }else if(ball_x > p2_x + 4*Constant::PLAYER2_WIDTH/5){  // soldan gelip raketin soluna carptiysa sola sekecek
+//            std::cout << "sol taraftan carpti" << std::endl;
+//            if(iBallDirection.rx() > 1){
+//                iBallDirection.rx() *= -1;
+//            }
+//        }
+    }
 
+    if ( ( iP2->collidesWithItem(iBall_2) ) && ( iBall2Direction.y() > 0 ))
+    {
+        iBall2Direction.ry() *= -1;
+        if (qFabs(iBall->pos().rx() - iP2->pos().rx()) < 30) {
+            std::cout << "Hey left " << std::endl;
+        } else if (qFabs(iBall->pos().rx() - iP2->pos().rx()) > 90) {
+            std::cout << "Hey right " << std::endl;
+        }else {
+            std::cout << "middle" << std::endl;
+        }
     }
 
     ////////Son eklenen token
@@ -260,36 +375,87 @@ void Gameplay::pong_tick(){
     if ( newTokenY < 0 )
      {
         // -1 for hitting the top wall
-        orgin1=orgin1-5;
-        //iP1->setRect(0,0,orgin1,5);
-        iTokenDirection.ry() *= -1;
+        iP2->setRect(0,0,Constant::PLAYER2_WIDTH*2,5);
+        iTokenDirection.rx() = 0;
+        iTokenDirection.ry() = 0;
+        iToken->setPos(100, 100);
+        iToken->setVisible(false);
      }
     if( newTokenY + iToken->boundingRect().bottom() > iScene.sceneRect().bottom()){
          //hitting bottom
-         orgin2=orgin2-5;
-         //iP2->setRect(0,0,orgin2,5);
-         iTokenDirection.ry() *= -1;
+         iP1->setRect(0,0,Constant::PLAYER1_WIDTH*2,5);
+         iTokenDirection.rx() = 0;
+         iTokenDirection.ry() = 0;
+         iToken->setPos(100, 100);
+         iToken->setVisible(false);
      }
 
 
     if ( ( iP1->collidesWithItem(iBall) ) && ( iBallDirection.y() < 0 ) ){
         iBallDirection.ry() *= -1;
+
+        // topun sekmesini degistiren yer
+
+        int ball_x = iBall->x();
+        int p2_x = iP2->pos().rx();
+        std::cout << "iball = " << ball_x << std::endl;
+        std::cout << "p2 = " << p2_x << std::endl;
+
+        if (qFabs(iBall->pos().rx() - iP2->pos().rx()) < 30) {
+            std::cout << "Hey left " << std::endl;
+        } else if (qFabs(iBall->pos().rx() - iP2->pos().rx()) > 90) {
+            std::cout << "Hey right " << std::endl;
+        }else {
+            std::cout << "middle" << std::endl;
+        }
+
+        // sagdan gelip raketin sagina carptiysa saga sekecek
+//        if(ball_x > p2_x && ball_x < p2_x + Constant::PLAYER2_WIDTH/5){ // player1_width ikiye bolunmesi lazim. suan mainwindowsta *2
+//            std::cout << "sag taraftan carpti" << std::endl;
+//            if(iBallDirection.rx() < 1){
+//                iBallDirection.rx() *= -1;
+//            }
+//        }else if(ball_x > p2_x + 4*Constant::PLAYER2_WIDTH/5){  // soldan gelip raketin soluna carptiysa sola sekecek
+//            std::cout << "sol taraftan carpti" << std::endl;
+//            if(iBallDirection.rx() > 1){
+//                iBallDirection.rx() *= -1;
+//            }
+//        }
+
     }
+
+    if ( ( iP1->collidesWithItem(iBall_2) ) && ( iBall2Direction.y() < 0 ) ){
+        iBall2Direction.ry() *= -1;
+        if (qFabs(iBall->pos().rx() - iP2->pos().rx()) < 30) {
+            std::cout << "Hey left " << std::endl;
+        } else if (qFabs(iBall->pos().rx() - iP2->pos().rx()) > 90) {
+            std::cout << "Hey right " << std::endl;
+        }else {
+            std::cout << "middle" << std::endl;
+        }
+    }
+
     if ( ( iP1->collidesWithItem(iToken) ) && ( iTokenDirection.y() < 0 ) ){
         iTokenDirection.ry() *= -1;
-        orgin1=orgin1+5;
+        //orgin1=orgin1+5;
         //iP1->setRect(0,0,orgin1,5);
     }
 
     if ( ( iP2->collidesWithItem(iToken) ) && ( iTokenDirection.y() > 0 ) ){
         iTokenDirection.ry() *= -1;
-        orgin2=orgin2+5;
+        //orgin2=orgin2+5;
         //iP2->setRect(0,0,orgin2,5);
     }
     if ( ( iBall->collidesWithItem(iToken) ) ){
         iTokenDirection.ry() *= -1;
         iTokenDirection.rx() *= -1;
         iBallDirection.ry() *= -1;
+    }
+
+    if ( ( iBall_2->collidesWithItem(iToken) ) ){
+        iTokenDirection.ry() *= -1;
+        iTokenDirection.rx() *= -1;
+        iBall2Direction.ry() *= -1;
     }
 
 
@@ -301,6 +467,7 @@ void Gameplay::pong_tick(){
 
     iBall->moveBy(iBallDirection.x(), iBallDirection.y());
     iToken->moveBy(iTokenDirection.x(), iTokenDirection.y());
+     iBall_2->moveBy(iBall2Direction.x(), iBall2Direction.y());
 
 //    if(iP1Direction==0){
 //        iP1->setPos(1,5);
@@ -325,7 +492,6 @@ void Gameplay::pong_tick(){
     MyThread::setBallY(iBall->pos().y());
 
 }
-
 
 
 bool Gameplay::eventFilter(QObject *target, QEvent *e)
@@ -400,10 +566,27 @@ void Gameplay::detectCollusion(){
             block_state[i]=false;
             defaultP2Size=defaultP2Size-5;
             iP2->setRect(0,0,defaultP2Size,5);
-            std::cout << "bir block yok edildi" << std::endl;
+            //std::cout << "bir block yok edildi" << std::endl;
         }
     }
 }
+
+void Gameplay::detectSideCollusion() {
+    if((left_side->collidesWithItem(iBall)) && side_state == true){
+        iBallDirection.ry()*=-1;
+        iScene.removeItem(left_side);
+        side_state = false;
+        iScene.addItem(iBall_2);
+        iBall_2->setVisible(true);
+        iBall_2->setPos(Constant::GAME_AREA_WIDTH/2, Constant::GAME_AREA_HEIGHT/2);
+        iBall2Direction.rx() = -3;
+        iBall2Direction.ry() = 3;
+
+        std::cout << "top sayisi ikiye cikti" << std::endl;
+    }
+}
+
+
 /*qreal Gameplay::calculateP2Direction()
 {
     qreal dir = 0;
