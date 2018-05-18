@@ -61,7 +61,7 @@ void Gameplay::set_arkanoid(){
     for(int i=0;i<BLOCK_SIZE;i++){
         block_state[i]=true;
     }
-    std::cout << "arkanoids blocks and boolean array are set" << std::endl;
+//    std::cout << "arkanoids blocks and boolean array are set" << std::endl;
 
 }
 void Gameplay::set_pong(){
@@ -84,7 +84,7 @@ void Gameplay::set_pong(){
     iBall->setPos(Constant::GAME_AREA_WIDTH/2, Constant::GAME_AREA_HEIGHT/2);
     iToken->setPos(Constant::GAME_AREA_WIDTH/3, Constant::GAME_AREA_HEIGHT/2);
     iP1->setPos(Constant::PLAYER1_POS_X, Constant::PLAYER1_POS_Y+8);
-    std::cout << "the position of token and p1 are set" << std::endl;
+//    std::cout << "the position of token and p1 are set" << std::endl;
 
 
     iTimer = new QTimer(this);
@@ -93,7 +93,7 @@ void Gameplay::set_pong(){
 
 }
 void Gameplay::check_pong_winner(int player){
-    std::cout << "player" << player << " kazandi" << std::endl;
+//    std::cout << "player" << player << " kazandi" << std::endl;
     game_over = true;
 }
 void Gameplay::check_arkanoid_winner(){
@@ -108,7 +108,7 @@ void Gameplay::check_blocks(){
     if(block_count != 8){
         block_count = 0;
     }else if (block_count == 8){
-        std::cout << "block count : " << block_count << std::endl;
+//        std::cout << "block count : " << block_count << std::endl;
         game_over = true;
     }
 }
@@ -129,8 +129,8 @@ void Gameplay::arkanoid_tick(){
 
     //int gy = MyThread::gyro1;
 
-    gyro1 =   MyThread::getGyro1()* 2;
-    gyro2 =   MyThread::getGyro2()* 2;
+    gyro1 =   MyThread::shared.gyro1* 2;
+    gyro2 =   MyThread::shared.gyro2* 2;
 
     iP1->setPos(gyro1,iP1->pos().y());
 
@@ -149,7 +149,7 @@ void Gameplay::arkanoid_tick(){
         }
 
         if(game_over == true && control == 0){
-            std::cout << "8 block yok edildi" << std::endl;
+//            std::cout << "8 block yok edildi" << std::endl;
             emit goal(5);
             control++;
             return;
@@ -188,9 +188,11 @@ void Gameplay::arkanoid_tick(){
     y_pos_of_ball=iBall->pos().ry();
 
 
-    MyThread::setBallX(iBall->pos().x());
-    MyThread::setBallY(iBall->pos().y());
+//    MyThread::setBallX(iBall->pos().x());
+//    MyThread::setBallY(iBall->pos().y());
 
+    MyThread::shared.mainBallX = iBall->pos().x();
+    MyThread::shared.mainBallY = iBall->pos().y();
 }
 void Gameplay::pong_tick(){
     if(game_over == true){
@@ -211,8 +213,8 @@ void Gameplay::pong_tick(){
 
     //int gy = MyThread::gyro1;
 
-    gyro1 =   MyThread::getGyro1()* 2;
-    //gyro2 =   MyThread::getGyro2()* 2;
+    gyro1 =   MyThread::shared.gyro1 * 2;
+    //gyro1 =   MyThread::getGyro1()* 2;
 
     iP1->setPos(gyro1,iP1->pos().y());
     //iP2->setPos(gyro2,iP2->pos().y());
@@ -233,13 +235,13 @@ void Gameplay::pong_tick(){
         // 1 for hitting the bottom wall, -1 for hitting the top wall
         if(newY < 0){
             p2Score++;
-            std::cout << "player2" << " : " << p2Score << std::endl;
+//            std::cout << "player2" << " : " << p2Score << std::endl;
             if(p2Score == 15){
                 check_pong_winner(2); // player 2 kazandi
             }
         }else{
             p1Score++;
-            std::cout << "player1" << " : " << p1Score << std::endl;
+//            std::cout << "player1" << " : " << p1Score << std::endl;
             if(p1Score == 15){
                 check_pong_winner(1); // player 1 kazandi
             }
@@ -278,13 +280,13 @@ void Gameplay::pong_tick(){
         // 1 for hitting the bottom wall, -1 for hitting the top wall
         if(newY2 < 0){
             p2Score++;
-            std::cout << "player2" << " : " << p2Score << std::endl;
+//            std::cout << "player2" << " : " << p2Score << std::endl;
             if(p2Score == 15){
                 check_pong_winner(2); // player 2 kazandi
             }
         }else{
             p1Score++;
-            std::cout << "player1" << " : " << p1Score << std::endl;
+//            std::cout << "player1" << " : " << p1Score << std::endl;
             if(p1Score == 15){
                 check_pong_winner(1); // player 1 kazandi
             }
@@ -331,15 +333,15 @@ void Gameplay::pong_tick(){
 
         int ball_x = iBall->x();
         int p2_x = iP2->pos().rx();
-        std::cout << "iball = " << ball_x << std::endl;
-        std::cout << "p2 = " << p2_x << std::endl;
-        if (qFabs(iBall->pos().rx() - iP2->pos().rx()) < 30) {
-            std::cout << "Hey left " << std::endl;
-        } else if (qFabs(iBall->pos().rx() - iP2->pos().rx()) > 90) {
-            std::cout << "Hey right " << std::endl;
-        }else {
-            std::cout << "middle" << std::endl;
-        }
+//        std::cout << "iball = " << ball_x << std::endl;
+//        std::cout << "p2 = " << p2_x << std::endl;
+//        if (qFabs(iBall->pos().rx() - iP2->pos().rx()) < 30) {
+//            std::cout << "Hey left " << std::endl;
+//        } else if (qFabs(iBall->pos().rx() - iP2->pos().rx()) > 90) {
+//            std::cout << "Hey right " << std::endl;
+//        }else {
+//            std::cout << "middle" << std::endl;
+//        }
         // sagdan gelip raketin sagina carptiysa saga sekecek
 //        if(ball_x > p2_x && ball_x < p2_x + Constant::PLAYER2_WIDTH/5){ // player1_width ikiye bolunmesi lazim. suan mainwindowsta *2
 //            std::cout << "sag taraftan carpti" << std::endl;
@@ -357,13 +359,13 @@ void Gameplay::pong_tick(){
     if ( ( iP2->collidesWithItem(iBall_2) ) && ( iBall2Direction.y() > 0 ))
     {
         iBall2Direction.ry() *= -1;
-        if (qFabs(iBall->pos().rx() - iP2->pos().rx()) < 30) {
-            std::cout << "Hey left " << std::endl;
-        } else if (qFabs(iBall->pos().rx() - iP2->pos().rx()) > 90) {
-            std::cout << "Hey right " << std::endl;
-        }else {
-            std::cout << "middle" << std::endl;
-        }
+//        if (qFabs(iBall->pos().rx() - iP2->pos().rx()) < 30) {
+//            std::cout << "Hey left " << std::endl;
+//        } else if (qFabs(iBall->pos().rx() - iP2->pos().rx()) > 90) {
+//            std::cout << "Hey right " << std::endl;
+//        }else {
+//            std::cout << "middle" << std::endl;
+//        }
     }
 
     ////////Son eklenen token
@@ -398,16 +400,16 @@ void Gameplay::pong_tick(){
 
         int ball_x = iBall->x();
         int p2_x = iP2->pos().rx();
-        std::cout << "iball = " << ball_x << std::endl;
-        std::cout << "p2 = " << p2_x << std::endl;
+//        std::cout << "iball = " << ball_x << std::endl;
+//        std::cout << "p2 = " << p2_x << std::endl;
 
-        if (qFabs(iBall->pos().rx() - iP2->pos().rx()) < 30) {
-            std::cout << "Hey left " << std::endl;
-        } else if (qFabs(iBall->pos().rx() - iP2->pos().rx()) > 90) {
-            std::cout << "Hey right " << std::endl;
-        }else {
-            std::cout << "middle" << std::endl;
-        }
+//        if (qFabs(iBall->pos().rx() - iP2->pos().rx()) < 30) {
+//            std::cout << "Hey left " << std::endl;
+//        } else if (qFabs(iBall->pos().rx() - iP2->pos().rx()) > 90) {
+//            std::cout << "Hey right " << std::endl;
+//        }else {
+//            std::cout << "middle" << std::endl;
+//        }
 
         // sagdan gelip raketin sagina carptiysa saga sekecek
 //        if(ball_x > p2_x && ball_x < p2_x + Constant::PLAYER2_WIDTH/5){ // player1_width ikiye bolunmesi lazim. suan mainwindowsta *2
@@ -426,13 +428,13 @@ void Gameplay::pong_tick(){
 
     if ( ( iP1->collidesWithItem(iBall_2) ) && ( iBall2Direction.y() < 0 ) ){
         iBall2Direction.ry() *= -1;
-        if (qFabs(iBall->pos().rx() - iP2->pos().rx()) < 30) {
-            std::cout << "Hey left " << std::endl;
-        } else if (qFabs(iBall->pos().rx() - iP2->pos().rx()) > 90) {
-            std::cout << "Hey right " << std::endl;
-        }else {
-            std::cout << "middle" << std::endl;
-        }
+//        if (qFabs(iBall->pos().rx() - iP2->pos().rx()) < 30) {
+//            std::cout << "Hey left " << std::endl;
+//        } else if (qFabs(iBall->pos().rx() - iP2->pos().rx()) > 90) {
+//            std::cout << "Hey right " << std::endl;
+//        }else {
+//            std::cout << "middle" << std::endl;
+//        }
     }
 
     if ( ( iP1->collidesWithItem(iToken) ) && ( iTokenDirection.y() < 0 ) ){
@@ -488,9 +490,11 @@ void Gameplay::pong_tick(){
     x_pos_of_ball=iBall->pos().rx();
     y_pos_of_ball=iBall->pos().ry();
 
-    MyThread::setBallX(iBall->pos().x());
-    MyThread::setBallY(iBall->pos().y());
+//    MyThread::setBallX(iBall->pos().x());
+//    MyThread::setBallY(iBall->pos().y());
 
+    MyThread::shared.mainBallX = iBall->pos().x();
+    MyThread::shared.mainBallY = iBall->pos().y();
 }
 
 
@@ -582,7 +586,7 @@ void Gameplay::detectSideCollusion() {
         iBall2Direction.rx() = -3;
         iBall2Direction.ry() = 3;
 
-        std::cout << "top sayisi ikiye cikti" << std::endl;
+//        std::cout << "top sayisi ikiye cikti" << std::endl;
     }
 }
 
