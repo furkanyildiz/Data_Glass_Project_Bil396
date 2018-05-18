@@ -39,8 +39,11 @@ void MyThread::run()
 
 void MyThread::readWrite()
 {
-    /*
+
+/*
     qDebug()<<"READY READ AND WRITE";
+
+
     QByteArray recData = socket->readAll();
 
     qDebug() << socketDescriptor << " This message receiving from data glass : " << recData;
@@ -48,32 +51,31 @@ void MyThread::readWrite()
     QString sendMessage = "1234;56;789;0;12";
     QByteArray sendByte = sendMessage.toUtf8() ;
     socket->write(sendByte);
+
 */
 
+   // while (socket->canReadLine()) {
+
+    QByteArray line =  socket->readAll();
+
+
+    qDebug() << " This message receiving from data glass : " << this->thread_id << line;
     QByteArray q_b;
 
-    /*
-    QBluetoothSocket *socket = qobject_cast<QBluetoothSocket *>(sender()); //silincede calısıyor.
-    if (!socket)
-        return;
-    */
-
     std::string data = "";
-   // while (socket->canReadLine()) {
-        data = "";
-       QByteArray line =  socket->readAll();
-
-
-        qDebug() << " This message receiving from data glass : " << this->thread_id << line;
+    data = "";
 
         if (thread_id == 1){
+
             shared.gyro1 = line.toInt();
             infos.gyro = shared.gyro2;
+
 
         }
         if (thread_id == 2){
             shared.gyro2 = line.toInt();
             infos.gyro = shared.gyro1;
+
         }
         infos.topx = shared.mainBallX / SCREEN_RATIO;
         infos.topy = shared.mainBallY / SCREEN_RATIO;
@@ -85,6 +87,8 @@ void MyThread::readWrite()
                 data+="0";
 
             std::string tempp = std::to_string(infos.gyro);
+
+
             data+=tempp;
 
             //topx
