@@ -191,7 +191,6 @@ void MainWindow::addScore(int count)
 
 }
 
-
 void MainWindow::addPlayer(int count){
     std::string s = " The player who participated in the game : Player"  + std::to_string(count);
     ui->labelPlayers->setText(s.c_str());

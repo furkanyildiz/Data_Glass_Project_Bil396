@@ -178,14 +178,13 @@ void Gameplay::arkanoid_tick(){
         std::cout << "iball = " << ball_x << std::endl;
         std::cout << "p2 = " << p2_x << std::endl;
 
-        qreal n = rand()%2+1;
         qreal randomNumber = 1 + (rand()%10) * 0.1;
 
         qreal pos = qFabs(iBall->pos().rx() - iP2->pos().rx());
 
         if (pos < 2*Constant::PLAYER2_WIDTH*1/5){
             std::cout << "left most " << std::endl;
-            iBallDirection.rx() = -2 * randomNumber;
+            iBallDirection.rx() = -1* 2 * randomNumber;
         }else if (pos < 2*Constant::PLAYER2_WIDTH*2/5 && pos > 2*Constant::PLAYER2_WIDTH*1/5) {
             std::cout << "left " << std::endl;
             iBallDirection.rx() = -1 * randomNumber;
@@ -296,8 +295,8 @@ void Gameplay::pong_tick(){
         iTokenDirection.ry() = -2;
         iTokenDirection *= -1;
 
-        iP2->setRect(0,0,Constant::PLAYER2_WIDTH, Constant::PLAYER2_HEIGHT);
-        iP1->setRect(0,0,Constant::PLAYER2_WIDTH, Constant::PLAYER2_HEIGHT);
+        iP2->setRect(0,0,Constant::PLAYER2_WIDTH*2, Constant::PLAYER2_HEIGHT); //2yebol
+        iP1->setRect(0,0,Constant::PLAYER2_WIDTH*2, Constant::PLAYER2_HEIGHT); //2yebol
 
         iBall_2->setPos(0, 0);
         iBall_2->setVisible(false);
@@ -376,28 +375,31 @@ void Gameplay::pong_tick(){
         int ball_x = iBall->x();
         int p2_x = iP2->pos().rx();
 
-        std::cout << "iball = " << ball_x << std::endl;
-        std::cout << "p2 = " << p2_x << std::endl;
-        if (qFabs(iBall->pos().rx() - iP2->pos().rx()) < 30) {
-            std::cout << "Hey left " << std::endl;
-        } else if (qFabs(iBall->pos().rx() - iP2->pos().rx()) > 90) {
-            std::cout << "Hey right " << std::endl;
+        qreal randomNumber = 1 + (rand()%10) * 0.1;
+
+        qreal pos = qFabs(iBall->pos().rx() - iP2->pos().rx());
+
+        if (pos < 2*Constant::PLAYER2_WIDTH*1/5){
+            std::cout << "left most " << std::endl;
+            iBallDirection.rx() = -1* 2 * randomNumber;
+        }else if (pos < 2*Constant::PLAYER2_WIDTH*2/5 && pos > 2*Constant::PLAYER2_WIDTH*1/5) {
+            std::cout << "left " << std::endl;
+            iBallDirection.rx() = -1 * randomNumber;
+        }else if (pos < 2*Constant::PLAYER2_WIDTH*4/5 && pos > 2*Constant::PLAYER2_WIDTH*3/5) {
+            std::cout << "right " << std::endl;
+            iBallDirection.rx() = randomNumber;
+        }else if (pos > 2*Constant::PLAYER2_WIDTH*4/5) {
+            std::cout << "right most" << std::endl;
+            iBallDirection.rx() = 2*randomNumber;
         }else {
             std::cout << "middle" << std::endl;
+            if(randomNumber > 1.5)
+                iBallDirection.rx() = -0.1;
+            else
+                iBallDirection.rx() = 0.1;
         }
 
-        // sagdan gelip raketin sagina carptiysa saga sekecek
-//        if(ball_x > p2_x && ball_x < p2_x + Constant::PLAYER2_WIDTH/5){ // player1_width ikiye bolunmesi lazim. suan mainwindowsta *2
-//            std::cout << "sag taraftan carpti" << std::endl;
-//            if(iBallDirection.rx() < 1){
-//                iBallDirection.rx() *= -1;
-//            }
-//        }else if(ball_x > p2_x + 4*Constant::PLAYER2_WIDTH/5){  // soldan gelip raketin soluna carptiysa sola sekecek
-//            std::cout << "sol taraftan carpti" << std::endl;
-//            if(iBallDirection.rx() > 1){
-//                iBallDirection.rx() *= -1;
-//            }
-//        }
+
 
     }
 
@@ -405,13 +407,29 @@ void Gameplay::pong_tick(){
     if ( ( iP2->collidesWithItem(iBall_2) ) && ( iBall2Direction.y() > 0 ))
     {
         iBall2Direction.ry() *= -1;
-//        if (qFabs(iBall->pos().rx() - iP2->pos().rx()) < 30) {
-//            std::cout << "Hey left " << std::endl;
-//        } else if (qFabs(iBall->pos().rx() - iP2->pos().rx()) > 90) {
-//            std::cout << "Hey right " << std::endl;
-//        }else {
-//            std::cout << "middle" << std::endl;
-//        }
+        qreal randomNumber = 1 + (rand()%10) * 0.1;
+
+        qreal pos = qFabs(iBall->pos().rx() - iP2->pos().rx());
+
+        if (pos < 2*Constant::PLAYER2_WIDTH*1/5){
+            std::cout << "left most " << std::endl;
+            iBallDirection.rx() = -1* 2 * randomNumber;
+        }else if (pos < 2*Constant::PLAYER2_WIDTH*2/5 && pos > 2*Constant::PLAYER2_WIDTH*1/5) {
+            std::cout << "left " << std::endl;
+            iBallDirection.rx() = -1 * randomNumber;
+        }else if (pos < 2*Constant::PLAYER2_WIDTH*4/5 && pos > 2*Constant::PLAYER2_WIDTH*3/5) {
+            std::cout << "right " << std::endl;
+            iBallDirection.rx() = randomNumber;
+        }else if (pos > 2*Constant::PLAYER2_WIDTH*4/5) {
+            std::cout << "right most" << std::endl;
+            iBallDirection.rx() = 2*randomNumber;
+        }else {
+            std::cout << "middle" << std::endl;
+            if(randomNumber > 1.5)
+                iBallDirection.rx() = -0.1;
+            else
+                iBallDirection.rx() = 0.1;
+        }
     }
 
     ////////Son eklenen token
@@ -438,49 +456,65 @@ void Gameplay::pong_tick(){
          iToken->setVisible(false);
      }
 
-
+    // P1 TOP ILE CARPISIYOR
     if ( ( iP1->collidesWithItem(iBall) ) && ( iBallDirection.y() < 0 ) ){
         iBallDirection.ry() *= -1;
 
         // topun sekmesini degistiren yer
 
-        int ball_x = iBall->x();
-        int p2_x = iP2->pos().rx();
-//        std::cout << "iball = " << ball_x << std::endl;
-//        std::cout << "p2 = " << p2_x << std::endl;
+        qreal randomNumber = 1 + (rand()%10) * 0.1;
 
-//        if (qFabs(iBall->pos().rx() - iP2->pos().rx()) < 30) {
-//            std::cout << "Hey left " << std::endl;
-//        } else if (qFabs(iBall->pos().rx() - iP2->pos().rx()) > 90) {
-//            std::cout << "Hey right " << std::endl;
-//        }else {
-//            std::cout << "middle" << std::endl;
-//        }
+        qreal pos = qFabs(iBall->pos().rx() - iP1->pos().rx());
 
-        // sagdan gelip raketin sagina carptiysa saga sekecek
-//        if(ball_x > p2_x && ball_x < p2_x + Constant::PLAYER2_WIDTH/5){ // player1_width ikiye bolunmesi lazim. suan mainwindowsta *2
-//            std::cout << "sag taraftan carpti" << std::endl;
-//            if(iBallDirection.rx() < 1){
-//                iBallDirection.rx() *= -1;
-//            }
-//        }else if(ball_x > p2_x + 4*Constant::PLAYER2_WIDTH/5){  // soldan gelip raketin soluna carptiysa sola sekecek
-//            std::cout << "sol taraftan carpti" << std::endl;
-//            if(iBallDirection.rx() > 1){
-//                iBallDirection.rx() *= -1;
-//            }
-//        }
+
+
+        if (pos < 2*Constant::PLAYER2_WIDTH*1/5){
+            std::cout << "left most " << std::endl;
+            iBallDirection.rx() = -2 * randomNumber;
+        }else if (pos < 2*Constant::PLAYER2_WIDTH*2/5 && pos > 2*Constant::PLAYER2_WIDTH*1/5) {
+            std::cout << "left " << std::endl;
+            iBallDirection.rx() = randomNumber;
+        }else if (pos < 2*Constant::PLAYER2_WIDTH*4/5 && pos > 2*Constant::PLAYER2_WIDTH*3/5) {
+            std::cout << "right " << std::endl;
+            iBallDirection.rx() = randomNumber;
+        }else if (pos > 2*Constant::PLAYER2_WIDTH*4/5) {
+            std::cout << "right most" << std::endl;
+            iBallDirection.rx() = 2*randomNumber;
+        }else {
+            std::cout << "middle" << std::endl;
+            if(randomNumber > 1.5)
+                iBallDirection.rx() = -0.1;
+            else
+                iBallDirection.rx() = 0.1;
+        }
 
     }
-
+    // P1 BALL2 ILE CARPISIYOR
     if ( ( iP1->collidesWithItem(iBall_2) ) && ( iBall2Direction.y() < 0 ) ){
         iBall2Direction.ry() *= -1;
-//        if (qFabs(iBall->pos().rx() - iP2->pos().rx()) < 30) {
-//            std::cout << "Hey left " << std::endl;
-//        } else if (qFabs(iBall->pos().rx() - iP2->pos().rx()) > 90) {
-//            std::cout << "Hey right " << std::endl;
-//        }else {
-//            std::cout << "middle" << std::endl;
-//        }
+        qreal randomNumber = 1 + (rand()%10) * 0.1;
+
+        qreal pos = qFabs(iBall->pos().rx() - iP1->pos().rx());
+
+        if (pos < 2*Constant::PLAYER2_WIDTH*1/5){
+            std::cout << "left most " << std::endl;
+            iBallDirection.rx() = 2 * randomNumber;
+        }else if (pos < 2*Constant::PLAYER2_WIDTH*2/5 && pos > 2*Constant::PLAYER2_WIDTH*1/5) {
+            std::cout << "left " << std::endl;
+            iBallDirection.rx() = randomNumber;
+        }else if (pos < 2*Constant::PLAYER2_WIDTH*4/5 && pos > 2*Constant::PLAYER2_WIDTH*3/5) {
+            std::cout << "right " << std::endl;
+            iBallDirection.rx() = -randomNumber;
+        }else if (pos > 2*Constant::PLAYER2_WIDTH*4/5) {
+            std::cout << "right most" << std::endl;
+            iBallDirection.rx() = -2*randomNumber;
+        }else {
+            std::cout << "middle" << std::endl;
+            if(randomNumber > 1.5)
+                iBallDirection.rx() = -0.1;
+            else
+                iBallDirection.rx() = 0.1;
+        }
     }
 
     if ( ( iP1->collidesWithItem(iToken) ) && ( iTokenDirection.y() < 0 ) ){
@@ -515,7 +549,7 @@ void Gameplay::pong_tick(){
 
     iBall->moveBy(iBallDirection.x(), iBallDirection.y());
     iToken->moveBy(iTokenDirection.x(), iTokenDirection.y());
-     iBall_2->moveBy(iBall2Direction.x(), iBall2Direction.y());
+    iBall_2->moveBy(iBall2Direction.x(), iBall2Direction.y());
 
 //    if(iP1Direction==0){
 //        iP1->setPos(1,5);
