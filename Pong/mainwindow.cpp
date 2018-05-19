@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent,int game_mode) :
     QGraphicsRectItem *p2 = new QGraphicsRectItem(0, 0, Constant::PLAYER2_WIDTH*2, Constant::PLAYER2_HEIGHT);
     p2->setBrush(QBrush(Qt::green));
 
-    QGraphicsEllipseItem *ball = new QGraphicsEllipseItem(0, 0, Constant::BALL_RAD, Constant::BALL_RAD);
+    QGraphicsEllipseItem *ball = new QGraphicsEllipseItem(0, 0, Constant::BALL_RAD*2, Constant::BALL_RAD*2);
     ball->setBrush(QBrush(Qt::magenta));
 
     QGraphicsEllipseItem *ball2 = new QGraphicsEllipseItem(0, 0, Constant::BALL_RAD, Constant::BALL_RAD);
@@ -159,11 +159,11 @@ void MainWindow::addScore(int count)
             ui->status->setText("P2 leads the game");
         }
 
-        if(P1iScore == 5){
+        if(P1iScore == 3){
             ResultWindow *who_won = new ResultWindow(NULL, 1, 1);
             who_won->show();
             this->close();
-        }else if(P2iScore == 5){
+        }else if(P2iScore == 3){
             ResultWindow *who_won = new ResultWindow(NULL, 2, 1);
             who_won->show();
             this->close();
@@ -175,16 +175,15 @@ void MainWindow::addScore(int count)
 //            goalarea->setVisible(true);
 //        }
 
-
-
         QTimer::singleShot(500, ui->showGoal, &QLabel::hide);
-
         QMovie *movie = new QMovie(":/Images/meksika.gif");
 
-        //QLabel *processLabel = new QLabel(this);
-        movie->setScaledSize(QSize(200,50));
-        ui->goalScreen->setMovie(movie);
+        // boyutu burada ayarlanacak
+        movie->setScaledSize(QSize(200,25));
+        ui->goalScreen->setGeometry(10, 10, 200, 25);
+        ui->goalScreen->setAlignment(Qt::AlignCenter);
 
+        ui->goalScreen->setMovie(movie);
         movie->start();
         QTimer::singleShot(1500, ui->goalScreen, &QLabel::hide);
         ui->goalScreen->setVisible(true);
