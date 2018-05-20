@@ -1,0 +1,10 @@
+Çalıştırmak için,
+
+
+make
+
+ardından,
+
+sudo ./ssd1306_demo --oled 3
+
+yazmanız yeterlidir.
