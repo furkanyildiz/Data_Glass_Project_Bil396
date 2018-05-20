@@ -1,10 +1,9 @@
 Çalıştırmak için,
 
+ssd1306_demo.cpp dosyasında IPADRESS define sini QT ye verdiğiniz IP adresini ve oradaki PORT adresini yazdıktan sonra, 
 
-make
-
-ardından,
+make komutu ile build edin ardından,
 
 sudo ./ssd1306_demo --oled 3
 
-yazmanız yeterlidir.
+komutunu yazmanız yeterlidir.
