@@ -159,11 +159,11 @@ void MainWindow::addScore(int count)
             ui->status->setText("P2 leads the game");
         }
 
-        if(P1iScore == 3){
+        if(P1iScore == 10){
             ResultWindow *who_won = new ResultWindow(NULL, 1, 1);
             who_won->show();
             this->close();
-        }else if(P2iScore == 3){
+        }else if(P2iScore == 10){
             ResultWindow *who_won = new ResultWindow(NULL, 2, 1);
             who_won->show();
             this->close();

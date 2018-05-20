@@ -7,7 +7,7 @@ public:
     Constant() {}
 
     static const int OLED_WIDTH = 64;
-    static const int OLED_HEIGHT = 110;
+    static const int OLED_HEIGHT = 127;
     static const int ARD_P1_WIDTH = 16;
     static const int ARD_P1_HEIGHT = 1;
     static const int ARD_P2_WIDTH = 16;

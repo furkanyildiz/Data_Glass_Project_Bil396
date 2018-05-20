@@ -8,7 +8,7 @@
 #include <mainwindow.h>
 
 #define PORTNUMBER 8081
-#define IPADDRESS "192.168.1.42"
+#define IPADDRESS "192.168.43.72"
 
 class QLabel;
 class QTcpServer;

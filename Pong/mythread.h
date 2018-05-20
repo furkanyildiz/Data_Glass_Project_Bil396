@@ -28,8 +28,11 @@ struct shared_values{
     int second_ballY; //Oyuna ikinci top dahil olduğunda onun koordinatı
     int square_X; //Oyunda gezen karenin koordinatı
     int square_Y; //Oyunda gezen karenin koordinatı
-    int item_X;  //İkinci topun oyuna dahil olması için çıkan karenin koordinatı
-    int item_Y;  //İkinci topun oyuna dahil olması için çıkan karenin koordinatı
+    int item_X;  //İkinci topun oyuna dahil olması için köşelerde çıkan çizginin koordinatı
+    int item_Y;  //İkinci topun oyuna dahil olması için köşelerde çıkan çizginin koordinatı
+    int flag_top2; //top2 varsa 1 yoksa 0
+    int flag_token;
+    int flag_block;
 };
 
 class MyThread : public QThread
@@ -47,6 +50,7 @@ public:
 
 signals:
     void error(QTcpSocket::SocketError socketerror);
+    void discError();
 
 public slots:
     void readWrite();
@@ -60,6 +64,8 @@ private:
     QTcpServer *tcpServer = nullptr;
     informations infos;
     int thread_id;
+    std::string send_string;
+
 };
 
 #endif // MYTHREAD_H

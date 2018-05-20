@@ -3,6 +3,8 @@
 #include <QListWidgetItem>
 #include "mainwindow.h"
 #include <iostream>
+#include "mythread.h"
+
 using namespace std;
 
 int btn1 = 0;
@@ -53,6 +55,7 @@ void Menu::on_pushButton_2_clicked()
 
 void Menu::on_listWidget_2_itemClicked(QListWidgetItem *item)
 {
+
     if(ui->listWidget_2->item(0) == item) {
         cout << "PONG" << endl;
         MainWindow *w = new MainWindow;

@@ -115,5 +115,5 @@ void Server::readWrite()
     qDebug() << "Glass connected\n";
     */
     mainWindow->addPlayer(playerNumber);
-    playerNumber++;
+    //playerNumber++;
 }

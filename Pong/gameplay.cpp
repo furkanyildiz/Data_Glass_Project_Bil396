@@ -77,7 +77,7 @@ void Gameplay::set_pong(){
     // iP2->setRect(0,0,Constant::PLAYER2_WIDTH, Constant::PLAYER2_HEIGHT);
     iScene.addItem(iP2);
     iScene.addItem(iBall);
-    left_side =new QGraphicsRectItem(0, 0, Constant::BLOCK_HEIGHT - 10, Constant::BLOCK_WIDTH + 6);
+    left_side =new QGraphicsRectItem(0, 0, Constant::BLOCK_HEIGHT - 10, Constant::BLOCK_WIDTH + 100);
 
     iScene.addItem(left_side);
     left_side->setBrush(QBrush(Qt::red));
@@ -94,7 +94,8 @@ void Gameplay::set_pong(){
     iTimer = new QTimer(this);
     iTimer->setInterval(20);
     iTimer->start();
-
+    MyThread::shared.flag_token = 1;
+    MyThread::shared.flag_block = 1;
 }
 
 void Gameplay::check_pong_winner(int player){
@@ -275,13 +276,13 @@ void Gameplay::pong_tick(){
         if(newY < 0){
             p2Score++;
 //            std::cout << "player2" << " : " << p2Score << std::endl;
-            if(p2Score == 3){
+            if(p2Score == 10){
                 check_pong_winner(2); // player 2 kazandi
             }
         }else{
             p1Score++;
 //            std::cout << "player1" << " : " << p1Score << std::endl;
-            if(p1Score == 3){
+            if(p1Score == 10){
                 check_pong_winner(1); // player 1 kazandi
             }
         }
@@ -290,6 +291,7 @@ void Gameplay::pong_tick(){
 
         iBall->setPos(Constant::GAME_AREA_WIDTH/2, Constant::GAME_AREA_HEIGHT/2);
         iToken->setVisible(true);
+        MyThread::shared.flag_token = 1;
         iToken->setPos(Constant::GAME_AREA_WIDTH/3, Constant::GAME_AREA_HEIGHT/2);
         iTokenDirection.rx() = 2;
         iTokenDirection.ry() = -2;
@@ -299,6 +301,7 @@ void Gameplay::pong_tick(){
         iP1->setRect(0,0,Constant::PLAYER2_WIDTH*2, Constant::PLAYER2_HEIGHT); //2yebol
 
         iBall_2->setPos(0, 0);
+        MyThread::shared.flag_top2 = 0;
         iBall_2->setVisible(false);
         iBall2Direction.ry() = 0;
         iBall2Direction.rx() = 0;
@@ -320,13 +323,13 @@ void Gameplay::pong_tick(){
         if(newY2 < 0){
             p2Score++;
 //            std::cout << "player2" << " : " << p2Score << std::endl;
-            if(p2Score == 3){
+            if(p2Score == 10){
                 check_pong_winner(2); // player 2 kazandi
             }
         }else{
             p1Score++;
 //            std::cout << "player1" << " : " << p1Score << std::endl;
-            if(p1Score == 3){
+            if(p1Score == 10){
                 check_pong_winner(1); // player 1 kazandi
             }
         }
@@ -334,6 +337,8 @@ void Gameplay::pong_tick(){
         emit goal(newY2 / fabs(newY2));
         iBall->setPos(Constant::GAME_AREA_WIDTH/2, Constant::GAME_AREA_HEIGHT/2);
         iToken->setVisible(true);
+        MyThread::shared.flag_token = 1;
+
         iToken->setPos(Constant::GAME_AREA_WIDTH/3, Constant::GAME_AREA_HEIGHT/2);
         iTokenDirection.rx() = 2;
         iTokenDirection.ry() = -2;
@@ -343,6 +348,7 @@ void Gameplay::pong_tick(){
         iP1->setRect(0,0,Constant::PLAYER2_WIDTH, Constant::PLAYER2_HEIGHT);
 
         iBall_2->setPos(0, 0);
+        MyThread::shared.flag_top2 = 0;
         iBall_2->setVisible(false);
         iBall2Direction.ry() = 0;
         iBall2Direction.rx() = 0;
@@ -445,6 +451,7 @@ void Gameplay::pong_tick(){
         iTokenDirection.rx() = 0;
         iTokenDirection.ry() = 0;
         iToken->setPos(100, 100);
+        MyThread::shared.flag_token = 0;
         iToken->setVisible(false);
      }
     if( newTokenY + iToken->boundingRect().bottom() > iScene.sceneRect().bottom()){
@@ -453,6 +460,7 @@ void Gameplay::pong_tick(){
          iTokenDirection.rx() = 0;
          iTokenDirection.ry() = 0;
          iToken->setPos(100, 100);
+         MyThread::shared.flag_token = 0;
          iToken->setVisible(false);
      }
 
@@ -575,6 +583,16 @@ void Gameplay::pong_tick(){
 
     MyThread::shared.mainBallX = iBall->pos().x();
     MyThread::shared.mainBallY = iBall->pos().y();
+
+    MyThread::shared.second_ballX = iBall_2->pos().x();
+    MyThread::shared.second_ballY = iBall_2->pos().y();
+
+    MyThread::shared.square_X = iToken->pos().x();
+    MyThread::shared.square_Y = iToken->pos().y();
+
+    MyThread::shared.item_X = left_side->pos().x();
+    MyThread::shared.item_Y = left_side->pos().y();
+
 }
 
 
@@ -662,28 +680,13 @@ void Gameplay::detectSideCollusion() {
         side_state = false;
         iScene.addItem(iBall_2);
         iBall_2->setVisible(true);
+        MyThread::shared.flag_top2 = 1;
         iBall_2->setPos(Constant::GAME_AREA_WIDTH/2, Constant::GAME_AREA_HEIGHT/2);
         iBall2Direction.rx() = -3;
         iBall2Direction.ry() = 3;
+        MyThread::shared.flag_block = 0;
 
 //        std::cout << "top sayisi ikiye cikti" << std::endl;
     }
 }
 
-
-/*qreal Gameplay::calculateP2Direction()
-{
-    qreal dir = 0;
-
-    if ( iBall->pos().x() + iBallDirection.x() > iP2->sceneBoundingRect().right() )
-    {
-        // move right
-        dir = 5;
-    }
-    else if ( iBall->pos().x() + iBallDirection.x() < iP2->sceneBoundingRect().left() )
-    {
-        // move left
-        dir = -5;
-    }
-
-    return dir;*/

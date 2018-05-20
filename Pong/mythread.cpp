@@ -5,19 +5,21 @@
 #include <QtCore>
 #include <iostream>
 #include "mythread.h"
+#include "gameplay.h"
 
 
 
-shared_values MyThread::shared = {0,0,0,0,0,0,0,0,0,0,0};
+shared_values MyThread::shared = {0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
-MyThread::MyThread(int ID, int thread_id, QObject *parent,QTcpServer *server) :
-    QThread(parent),
-    tcpServer(server)
+MyThread::MyThread(int ID, int thread_id, QObject *parent,QTcpServer *server) : QThread(parent),tcpServer(server)
 {
     this->socketDescriptor = ID;
     this->thread_id = thread_id;
+    this->send_string = "";
     shared.connected_glasses_count++;
     qDebug()<< "Connected glasses: "<<shared.connected_glasses_count;
+    qDebug()<< "thread id : "<<thread_id;
+
 }
 
 void MyThread::run()
@@ -28,6 +30,7 @@ void MyThread::run()
 
     connect(socket, SIGNAL(readyRead()), this, SLOT(readWrite()),Qt::DirectConnection);
     connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()),Qt::DirectConnection);
+//    connect(socket, SIGNAL(connected()), this, SLOT(readWrite()),Qt::DirectConnection);
 
     qDebug() << socketDescriptor << " Client connected";
 
@@ -58,12 +61,12 @@ void MyThread::readWrite()
 
     QByteArray line =  socket->readAll();
 
-
     qDebug() << " This message receiving from data glass : " << this->thread_id << line;
     QByteArray q_b;
 
     std::string data = "";
     data = "";
+    send_string.clear();
 
         if (thread_id == 1){
 
@@ -83,44 +86,80 @@ void MyThread::readWrite()
         if(socket->bytesToWrite()==0 && socket->isWritable()){
 
             q_b.clear();
-            if (infos.gyro <10 )
-                data+="0";
 
             std::string tempp = std::to_string(infos.gyro);
-
-
-            data+=tempp;
+            send_string+=tempp;
+            send_string+=";";
 
             //topx
-            data+=";";
-
-            if(infos.topx <10)
-                data+="0";
-
             tempp = std::to_string(infos.topx);
-            data+=tempp;
+            send_string+=tempp;
+            send_string+=";";
 
-
-             //topy
-
-            data+=";";
-            if(infos.topy <10)
-                data+="00";
-
-            else if(infos.topy <100)
-                data+="0";
-
+            //topy
             tempp = std::to_string(infos.topy);
-            data+=tempp;
+            send_string+=tempp;
+            send_string+=";";
+
+
+            //flag top 2
+            tempp = std::to_string(shared.flag_top2);
+            send_string+=tempp;
+            send_string+=";";
+
+            //top2 address
+            tempp = std::to_string(shared.second_ballX);
+            send_string+=tempp;
+            send_string+=";";
+
+            //top2y
+            tempp = std::to_string(shared.second_ballY);
+            send_string+=tempp;
+            send_string+=";";
+
+            //flag of token
+            tempp = std::to_string(shared.flag_token);
+            send_string+=tempp;
+            send_string+=";";
+
+            //token address
+            //tokenx
+            tempp = std::to_string(shared.item_X);
+            send_string+=tempp;
+            send_string+=";";
+
+            //tokeny
+            tempp = std::to_string(shared.item_Y);
+            send_string+=tempp;
+            send_string+=";";
+
+
+            //flag of block
+            tempp = std::to_string(shared.flag_block);
+            send_string+=tempp;
+            send_string+=";";
+
+            //blocks coordinates
+            //blockX
+            tempp = std::to_string(shared.square_X);
+            send_string+=tempp;
+            send_string+=";";
+
+            //BlockY
+            tempp = std::to_string(shared.square_Y);
+            send_string+=tempp;
+            send_string+=";";
 
             //yollama formatına cevir ve yolla
-            QString data_to_write = QString::fromStdString(data);
+
+            std::cout << "yollanan string: " <<send_string <<std::endl;
+            QString data_to_write = QString::fromStdString(send_string);
             q_b = data_to_write.toUtf8();
             socket->write(q_b);
-            qDebug() << "string:" << data_to_write ;
-            qDebug() << "Sent string as bytes:" << q_b ;
+            //qDebug() << "string:" << data_to_write ;
+            //qDebug() << "Sent string as bytes:" << q_b ;
 
-            qDebug() <<"Sent top x: "<<infos.topx << " top y: " << infos.topy;
+            //qDebug() <<"Sent top x: "<<infos.topx << " top y: " << infos.topy;
 
 
         }
@@ -134,7 +173,21 @@ void MyThread::readWrite()
 
 void MyThread::disconnected()
 {
-    qDebug() << socketDescriptor << " Disconnected";
-    socket->deleteLater();
-    exit(0);
+/*    qDebug() << socketDescriptor << " Disconnected";
+    qDebug() << "Waiting player Connection";
+
+    QTime dieTime = QTime::currentTime().addSecs(10);
+    while (QTime::currentTime() < dieTime){
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    }
+
+    if(QTime::currentTime() < dieTime){
+        qDebug() << "Connection is established again";
+    }else{
+        qDebug() << "Connection is lost";
+        socket->deleteLater();
+        exit(0);
+
+    }*/
+    qDebug() << "Connection is lost" << thread_id << " ++++";
 }
