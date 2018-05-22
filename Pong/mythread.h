@@ -34,8 +34,9 @@ struct shared_values{
     int flag_top2; //top2 varsa 1 yoksa 0
     int flag_token;
     int flag_block;
-    int arkanoid_block_x[8]; // arkanoidde 8 block var her birinin x koordinati
-    int arkanoid_block_y[8]; // arkanoidde 8 block var her birinin y koordinati
+    //int arkanoid_block_x[8]; //  x koordinati <- gameplayde de yorumu aldim lazim olur belki diye (set arkanoid fonksiyonunda)
+    //int arkanoid_block_y[8]; //  y koordinati <- gameplayde de yorumu aldim lazim olur belki diye (set arkanoid fonksiyonunda)
+    int block_destroyed[8]; // 1 ise yok olmus, 0 ise hala oyunda (detectCollusion fonksiyonunda degistiriliyor)
 };
 
 class MyThread : public QThread

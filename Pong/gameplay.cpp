@@ -658,15 +658,15 @@ void Gameplay::setBlocks(){
         if(i<5){
             blocks[i]->setPos(i*(Constant::BLOCK_WIDTH + 8)+12,10);
             // arkanoiddeki blocklarin koordinatlari
-            MyThread::shared.arkanoid_block_x[i] = i*(Constant::BLOCK_WIDTH + 8)+12;
-            MyThread::shared.arkanoid_block_y[i] = 10;
+            //MyThread::shared.arkanoid_block_x[i] = i*(Constant::BLOCK_WIDTH + 8)+12;
+            //MyThread::shared.arkanoid_block_y[i] = 10;
             /*qDebug() << "Arkanoid block" << i << "(" <<  MyThread::shared.arkanoid_block_x[i]
                         << "," <<  MyThread::shared.arkanoid_block_y[i] << ")";*/
         }else{
             blocks[i]->setPos((i%5)*(Constant::BLOCK_WIDTH + 8)+12+Constant::BLOCK_WIDTH,30);
             // arkanoiddeki blocklarin koordinatlari
-            MyThread::shared.arkanoid_block_x[i] = (i%5)*(Constant::BLOCK_WIDTH + 8)+12+Constant::BLOCK_WIDTH;
-            MyThread::shared.arkanoid_block_y[i] = 30;
+            //MyThread::shared.arkanoid_block_x[i] = (i%5)*(Constant::BLOCK_WIDTH + 8)+12+Constant::BLOCK_WIDTH;
+            //MyThread::shared.arkanoid_block_y[i] = 30;
             /*qDebug() << "Arkanoid block" << i << "(" <<  MyThread::shared.arkanoid_block_x[i]
                         << "," <<  MyThread::shared.arkanoid_block_y[i] << ")";*/
         }
@@ -676,11 +676,13 @@ void Gameplay::setBlocks(){
 }
 void Gameplay::detectCollusion(){
     for(int i=0;i<8;i++){
-        if((blocks[i]->collidesWithItem(iBall))&&block_state[i]==true){
+        if((blocks[i]->collidesWithItem(iBall)) && block_state[i]==true){
             iBallDirection.ry()*=-1;
             iScene.removeItem(blocks[i]);
             block_state[i]=false;
-            defaultP2Size=defaultP2Size-5;
+            MyThread::shared.block_destroyed[i] = 1;
+            //defaultP2Size=defaultP2Size-5;
+            //qDebug() << i << ". block yok edildi -> blockdestroyed=" << MyThread::shared.block_destroyed[i];
             //iP2->setRect(0,0,defaultP2Size,5);
             //std::cout << "bir block yok edildi" << std::endl;
         }
