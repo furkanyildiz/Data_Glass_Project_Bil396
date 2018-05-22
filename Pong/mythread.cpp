@@ -8,7 +8,7 @@
 #include "gameplay.h"
 
 
-
+int i = 0;
 shared_values MyThread::shared = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 MyThread::MyThread(int ID, int thread_id, QObject *parent,QTcpServer *server) : QThread(parent),tcpServer(server)
@@ -30,7 +30,6 @@ void MyThread::run()
 
     connect(socket, SIGNAL(readyRead()), this, SLOT(readWrite()),Qt::DirectConnection);
     connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()),Qt::DirectConnection);
-//    connect(socket, SIGNAL(connected()), this, SLOT(readWrite()),Qt::DirectConnection);
 
     qDebug() << socketDescriptor << " Client connected";
 
@@ -42,10 +41,12 @@ void MyThread::run()
 
 void MyThread::readWrite()
 {
+    qDebug()<< "SINYAL GELDI!!!!!!!";
+//    while(1)
+        if (shared.game_mode == 1)
+            Pong_mode();
 
-
-    if (shared.game_mode == 1)
-        Pong_mode();
+        qDebug()<< "SINYAL bitti";
 
 /*
     qDebug()<<"READY READ AND WRITE";
@@ -74,7 +75,7 @@ void MyThread::readWrite()
 
 void MyThread::Pong_mode(){
 
-    QByteArray line =  socket->readAll();
+    QByteArray line =  socket->readLine().trimmed();
 
     qDebug() << " This message receiving from data glass : " << this->thread_id << line;
     QByteArray q_b;
@@ -82,6 +83,8 @@ void MyThread::Pong_mode(){
     std::string data = "";
     data = "";
     send_string.clear();
+//    send_string = "furkan:" + std::to_string(i);
+    i++;
 
         if (thread_id == 1){
 
@@ -116,7 +119,7 @@ void MyThread::Pong_mode(){
             send_string+=tempp;
             send_string+=";";
 
-
+/*
             //flag top 2
             tempp = std::to_string(shared.flag_top2);
             send_string+=tempp;
@@ -164,9 +167,11 @@ void MyThread::Pong_mode(){
             tempp = std::to_string(shared.square_Y);
             send_string+=tempp;
             send_string+=";";
-
+*/
             //yollama formatına cevir ve yolla
 
+
+            send_string+="\n";
             std::cout << "yollanan string: " <<send_string <<std::endl;
             QString data_to_write = QString::fromStdString(send_string);
             q_b = data_to_write.toUtf8();
