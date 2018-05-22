@@ -342,29 +342,66 @@ int main(int argc, char **argv)
     fprintf(stderr,"deneme");
 	int balanced_gyro;
 	srand(time(NULL));  
-
-    while(1){
+	
+	int flag_second_ball; //if second ball in game its 1, otherwise its 0.
+	int second_ball_x;
+	int second_ball_y;
+	int flag_token;      //if token in game its 1, otherwise its 0.
+	int token_x;
+	int token_y;
+	int flag_block;      //iki topun çıkması için bulunan duvar
+	int block_x;
+	int block_y;
+    
+	while(1){
 
 		acclX = read_word_2c(0x3B);
 		balanced_gyro = calculate_gyro(acclX);
 		//balanced_gyro = rand();
 		fprintf(stderr,"%d",balanced_gyro);
-		
 
 
-        sprintf(text, "%d", balanced_gyro);
-        send(sock , text , strlen(text) , 0 );
-        valread = read( sock , buffer, 1024);
-        fprintf(stderr,"serverdan okunan: %s\n",buffer );
+
+		sprintf(text, "%d", balanced_gyro);
+		send(sock , text , strlen(text) , 0 );
+		valread = read( sock , buffer, 1024);
+		fprintf(stderr,"serverdan okunan: %s\n",buffer );
 
 
-        char * token = strtok(buffer, ";");
-        other_gyro = atoi(token);
-        token = strtok(NULL, ";");
+		char * token = strtok(buffer, ";");
+		other_gyro = atoi(token);
+		token = strtok(NULL, ";");
 		topx = atoi(token);
-        token = strtok(NULL, ";");       
-        topy = atoi(token);
-        token = strtok(NULL, ";");  
+		token = strtok(NULL, ";");       
+		topy = atoi(token);
+		token = strtok(NULL, ";");  
+
+		flag_second_ball = atoi(token);
+		token = strtok(NULL, ";");  
+
+		second_ball_x = atoi(token);
+		token = strtok(NULL, ";");  
+
+		second_ball_y = atoi(token);
+		token = strtok(NULL, ";");  
+
+		flag_token = atoi(token);
+		token = strtok(NULL, ";");  
+
+		token_x = atoi(token);
+		token = strtok(NULL, ";");  
+
+		token_y = atoi(token);
+		token = strtok(NULL, ";");  
+
+		flag_block = atoi(token);
+		token = strtok(NULL, ";");  
+
+		block_x = atoi(token);
+		token = strtok(NULL, ";");  
+
+		block_y = atoi(token);
+		token = strtok(NULL, ";");  	    
 
 		display.clearDisplay();
 		display.fillCircle(topy, topx, 2, WHITE);
