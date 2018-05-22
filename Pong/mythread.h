@@ -34,6 +34,8 @@ struct shared_values{
     int flag_top2; //top2 varsa 1 yoksa 0
     int flag_token;
     int flag_block;
+    int arkanoid_block_x[8]; // arkanoidde 8 block var her birinin x koordinati
+    int arkanoid_block_y[8]; // arkanoidde 8 block var her birinin y koordinati
 };
 
 class MyThread : public QThread

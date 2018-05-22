@@ -654,11 +654,24 @@ void Gameplay::setBlocks(){
         iScene.addItem(blocks[i]);
         blocks[i]->setBrush(QBrush(Qt::red));
 
-        if(i<5)
+        // ekrana yerlestirilip threaddeki shared valuesa kaydediliyor x ve y koordinatlari
+        if(i<5){
             blocks[i]->setPos(i*(Constant::BLOCK_WIDTH + 8)+12,10);
-        else{
+            // arkanoiddeki blocklarin koordinatlari
+            MyThread::shared.arkanoid_block_x[i] = i*(Constant::BLOCK_WIDTH + 8)+12;
+            MyThread::shared.arkanoid_block_y[i] = 10;
+            /*qDebug() << "Arkanoid block" << i << "(" <<  MyThread::shared.arkanoid_block_x[i]
+                        << "," <<  MyThread::shared.arkanoid_block_y[i] << ")";*/
+        }else{
             blocks[i]->setPos((i%5)*(Constant::BLOCK_WIDTH + 8)+12+Constant::BLOCK_WIDTH,30);
+            // arkanoiddeki blocklarin koordinatlari
+            MyThread::shared.arkanoid_block_x[i] = (i%5)*(Constant::BLOCK_WIDTH + 8)+12+Constant::BLOCK_WIDTH;
+            MyThread::shared.arkanoid_block_y[i] = 30;
+            /*qDebug() << "Arkanoid block" << i << "(" <<  MyThread::shared.arkanoid_block_x[i]
+                        << "," <<  MyThread::shared.arkanoid_block_y[i] << ")";*/
         }
+
+
     }
 }
 void Gameplay::detectCollusion(){
