@@ -65,7 +65,7 @@ void Gameplay::set_arkanoid(){
         block_state[i]=true;
     }
 //    std::cout << "arkanoids blocks and boolean array are set" << std::endl;
-
+    MyThread::shared.game_mode = 0; // arkanoid oyunu set edildi
 }
 
 void Gameplay::set_pong(){
@@ -96,6 +96,7 @@ void Gameplay::set_pong(){
     iTimer->start();
     MyThread::shared.flag_token = 1;
     MyThread::shared.flag_block = 1;
+    MyThread::shared.game_mode = 1; // pong oyunu set edildi
 }
 
 void Gameplay::check_pong_winner(int player){

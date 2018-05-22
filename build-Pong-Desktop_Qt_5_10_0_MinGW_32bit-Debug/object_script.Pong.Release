@@ -1,0 +1,16 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\gameplay.o
+./release\menu.o
+./release\server.o
+./release\mythread.o
+./release\resultwindow.o
+./release\qrc_resources.o
+./release\moc_mainwindow.o
+./release\moc_gameplay.o
+./release\moc_menu.o
+./release\moc_server.o
+./release\moc_mythread.o
+./release\moc_resultwindow.o
+);
