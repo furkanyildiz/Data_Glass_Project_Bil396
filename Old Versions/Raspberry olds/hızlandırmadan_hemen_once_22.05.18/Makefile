@@ -22,7 +22,7 @@ SOURCES = ${PROGRAMS:=.cpp}
 all: ${PROGRAMS}
 
 ${PROGRAMS}: ${SOURCES}
-	g++ ${CCFLAGS} -lwiringPi -lm -lpthread -lssd1306 $@.cpp -o $@
+	g++ ${CCFLAGS} -Wall -lwiringPi -lm -lssd1306 $@.cpp -o $@
 
 clean:
 	rm -rf $(PROGRAMS)
