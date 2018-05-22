@@ -9,7 +9,7 @@
 
 
 
-shared_values MyThread::shared = {0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+shared_values MyThread::shared = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 MyThread::MyThread(int ID, int thread_id, QObject *parent,QTcpServer *server) : QThread(parent),tcpServer(server)
 {
@@ -43,6 +43,10 @@ void MyThread::run()
 void MyThread::readWrite()
 {
 
+
+    if (shared.game_mode == 1)
+        Pong_mode();
+
 /*
     qDebug()<<"READY READ AND WRITE";
 
@@ -58,6 +62,17 @@ void MyThread::readWrite()
 */
 
    // while (socket->canReadLine()) {
+
+
+
+
+
+    //}
+
+
+}
+
+void MyThread::Pong_mode(){
 
     QByteArray line =  socket->readAll();
 
@@ -163,11 +178,6 @@ void MyThread::readWrite()
 
 
         }
-
-
-
-    //}
-
 
 }
 

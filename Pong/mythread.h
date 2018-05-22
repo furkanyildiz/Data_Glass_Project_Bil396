@@ -19,6 +19,7 @@ typedef struct informations
 
 //server ile gameplay arasındaki struct.
 struct shared_values{
+    int game_mode; //oyun pongsa 1, arkonoid ise 0
     int connected_glasses_count;
     int gyro1;
     int gyro2;
@@ -65,6 +66,7 @@ private:
     informations infos;
     int thread_id;
     std::string send_string;
+    void Pong_mode();
 
 };
 
