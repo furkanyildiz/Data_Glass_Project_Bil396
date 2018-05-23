@@ -7,8 +7,6 @@
 #include "mythread.h"
 #include "gameplay.h"
 
-
-int i = 0;
 shared_values MyThread::shared = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 MyThread::MyThread(int ID, int thread_id, QObject *parent,QTcpServer *server) : QThread(parent),tcpServer(server)
@@ -42,8 +40,8 @@ void MyThread::run()
 void MyThread::readWrite()
 {
     qDebug()<< "SINYAL GELDI!!!!!!!";
-//    while(1)
-        if (shared.game_mode == 1)
+
+    if (shared.game_mode == 1)
             Pong_mode();
 
         qDebug()<< "SINYAL bitti";
@@ -84,7 +82,6 @@ void MyThread::Pong_mode(){
     data = "";
     send_string.clear();
 //    send_string = "furkan:" + std::to_string(i);
-    i++;
 
         if (thread_id == 1){
 
