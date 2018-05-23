@@ -313,7 +313,8 @@ void Gameplay::pong_tick(){
         // ekrani eski haline getirmke icin
        // emit goal(10);
 
-        iScene.addItem(left_side);
+        if(!iScene.items().contains(left_side))
+            iScene.addItem(left_side);
         side_state = true;
 
     }
@@ -651,7 +652,8 @@ void Gameplay::setBlocks(){
     for(int i=0;i<8;i++){
         blocks[i]=new QGraphicsRectItem(0,0,Constant::BLOCK_WIDTH,Constant::BLOCK_HEIGHT);
 
-        iScene.addItem(blocks[i]);
+        if(!iScene.items().contains(blocks[i]))
+            iScene.addItem(blocks[i]);
         blocks[i]->setBrush(QBrush(Qt::red));
 
         // ekrana yerlestirilip threaddeki shared valuesa kaydediliyor x ve y koordinatlari
@@ -694,7 +696,8 @@ void Gameplay::detectSideCollusion() {
         iBallDirection.ry()*=-1;
         iScene.removeItem(left_side);
         side_state = false;
-        iScene.addItem(iBall_2);
+        if(!iScene.items().contains(iBall_2))
+            iScene.addItem(iBall_2);
         iBall_2->setVisible(true);
         MyThread::shared.flag_top2 = 1;
         iBall_2->setPos(Constant::GAME_AREA_WIDTH/2, Constant::GAME_AREA_HEIGHT/2);
