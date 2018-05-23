@@ -6,16 +6,17 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <unistd.h>
-
+#include <pthread.h>
 #include <getopt.h>
 #include <time.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include "oled.h"
+
+//change this for every server.
 #define PORT 8081
 #define IPADRESS "192.168.43.72"
-#include <pthread.h>
 
 int sock = 0;
 void *writeSocket(void *vargp);
@@ -157,7 +158,7 @@ void *readSocket(void *vargp)
 			token = strtok(NULL, ";");  
 
 			block_y = atoi(token);
-			token = strtok(NULL, ";");  	    
+			//token = strtok(NULL, ";");  	    
 
 			display.clearDisplay();
 			display.fillCircle(topy, topx, 2, WHITE);
