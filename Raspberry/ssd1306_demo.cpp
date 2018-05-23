@@ -18,37 +18,9 @@
 #include <pthread.h>
 
 int sock = 0;
-void *readSocket(void *vargp)
-{
-	int numBytesRcvd;
-	char buffer[50] = {0};
-	char * readed ;
-    while(1){
-		
-		numBytesRcvd = recv(sock , buffer, 50,0);
-		buffer[numBytesRcvd] = '\0';
-		readed = strtok(buffer, "\n");
-		fprintf(stderr,"serverdan okunan: %s\n",readed );
-		//usleep(1);
-		
-	}
-}
-void *writeSocket(void *vargp)
-{
-	int rand_;
-	char text[10];
-
-    while(1){
-		
-		
-		rand_ = rand()%50;
-		//fprintf(stderr,"%d",rand_);
-		sprintf(text, "%d\n", rand_);
-		send(sock , text , strlen(text) , 0 );
-		//usleep(1);
-
-	}
-}
+void *writeSocket(void *vargp);
+void *readSocket(void *vargp);
+char *strdupf (const char *s);
 
 int main(int argc, char **argv)
 {
@@ -115,24 +87,13 @@ int main(int argc, char **argv)
 	double y_rotation=0.0;
 	int x_to_gyro=0;
 	
-	  // init done
-	  display.clearDisplay();   // clears the screen and buffer
+	// init done
+	display.clearDisplay();   // clears the screen and buffer
 	  
-
     fprintf(stderr,"deneme");
 	int balanced_gyro;
 	srand(time(NULL));  
 	
-	int flag_second_ball; //if second ball in game its 1, otherwise its 0.
-	int second_ball_x;
-	int second_ball_y;
-	int flag_token;      //if token in game its 1, otherwise its 0.
-	int token_x;
-	int token_y;
-	int flag_block;      //iki topun çıkması için bulunan duvar
-	int block_x;
-	int block_y;
-    int numBytesRcvd;
     
     pthread_t thread_id_read,thread_id_write;
 	pthread_create(&thread_id_write, NULL, writeSocket, NULL);
@@ -144,34 +105,26 @@ int main(int argc, char **argv)
     printf("After Thread\n");
     exit(0);
 
-    
-    /*
-	while(1){
-
-		//acclX = read_word_2c(0x3B);
-		//balanced_gyro = calculate_gyro(acclX);
-		balanced_gyro = rand();
-		fprintf(stderr,"%d",balanced_gyro);
-
-
-
-		sprintf(text, "%d", balanced_gyro);
-		send(sock , text , strlen(text) , 0 );
-		//numBytesRcvd = read( sock , buffer, 50);
+	// Free PI GPIO ports
+	display.close();
+}
+void *readSocket(void *vargp)
+{
+	int numBytesRcvd,other_gyro,topx,topy,flag_second_ball,second_ball_x,second_ball_y,flag_token,token_x,token_y,flag_block,block_x,block_y;
+	char buffer[50] = {0};
+	char * readed ;
+	char*token;
+	char* split_str;
+    while(1){
+		
 		numBytesRcvd = recv(sock , buffer, 50,0);
 		buffer[numBytesRcvd] = '\0';
-		//fprintf(stderr,"size: %d\n",numBytesRcvd );
-		fprintf(stderr,"serverdan okunan: %s\n",buffer );
-*/
-
-
-/*
-		buffer[numBytesRcvd] = '\0';
+		readed = strtok(buffer, "\n");
+		fprintf(stderr,"serverdan okunan: %s\n",readed );
+		split_str = strdupf(readed);
 		if (numBytesRcvd > 0){
-			fprintf(stderr,"serverdan okunan: %s\n",buffer );
 
-
-			char * token = strtok(buffer, ";");
+			token = strtok(split_str, ";");
 			other_gyro = atoi(token);
 			token = strtok(NULL, ";");
 			topx = atoi(token);
@@ -214,19 +167,31 @@ int main(int argc, char **argv)
 			display.display();
 			//delay(1);
 
-		}*/
-    //}
+		}
+		
+	}
+	free(split_str);
+}
+void *writeSocket(void *vargp)
+{
+	int balanced_gyro,acclX;
+	char text[10];
 
-/*
-	// draw a single pixel
-	display.drawPixel(10, 10, WHITE);
-	display.display();
-	sleep(2);
-	display.clearDisplay();
-  
-	*/
-  
+    while(1){
+		
+		//acclX = read_word_2c(0x3B);
+		//balanced_gyro = calculate_gyro(acclX);
+		balanced_gyro = rand()%50;
+		//fprintf(stderr,"%d",balanced_gyro);
+		sprintf(text, "%d\n", balanced_gyro);
+		send(sock , text , strlen(text) , 0 );
+		//usleep(1);
 
-	// Free PI GPIO ports
-	display.close();
+	}
+}
+char *strdupf (const char *s) {
+    char *d = malloc (strlen (s) + 1);   // Space for length plus nul
+    if (d == NULL) return NULL;          // No memory
+    strcpy (d,s);                        // Copy the characters
+    return d;                            // Return the new string
 }
