@@ -132,7 +132,7 @@ void *readSocket(void *vargp)
 			token = strtok(NULL, ";");       
 			topy = atoi(token);
 			token = strtok(NULL, ";");  
-
+/*
 			flag_second_ball = atoi(token);
 			token = strtok(NULL, ";");  
 
@@ -158,8 +158,7 @@ void *readSocket(void *vargp)
 			token = strtok(NULL, ";");  
 
 			block_y = atoi(token);
-			//token = strtok(NULL, ";");  	    
-
+*/
 			display.clearDisplay();
 			display.fillCircle(topy, topx, 2, WHITE);
 			display.drawFastVLine(2, balanced_gyro, 15, WHITE);
