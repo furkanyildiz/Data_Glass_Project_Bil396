@@ -131,32 +131,34 @@ void *readSocket(void *vargp)
 			topx = atoi(token);
 			token = strtok(NULL, ";");       
 			topy = atoi(token);
+
+			//aşağıdakıler server tarafından da yorumla kapalı yani gonderılmıyor.İki taraftada açılabilinir.
+			/*			
 			token = strtok(NULL, ";");  
-/*
 			flag_second_ball = atoi(token);
+			
 			token = strtok(NULL, ";");  
-
 			second_ball_x = atoi(token);
+			
 			token = strtok(NULL, ";");  
-
 			second_ball_y = atoi(token);
+			
 			token = strtok(NULL, ";");  
-
 			flag_token = atoi(token);
+			
 			token = strtok(NULL, ";");  
-
 			token_x = atoi(token);
+			
 			token = strtok(NULL, ";");  
-
 			token_y = atoi(token);
+			
 			token = strtok(NULL, ";");  
-
 			flag_block = atoi(token);
+			
 			token = strtok(NULL, ";");  
-
 			block_x = atoi(token);
+			
 			token = strtok(NULL, ";");  
-
 			block_y = atoi(token);
 */
 			display.clearDisplay();
