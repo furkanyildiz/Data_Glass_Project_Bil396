@@ -3,7 +3,9 @@
 
 #include <QDialog>
 #include <QListWidgetItem>
+#include <server.h>
 
+class Server;
 namespace Ui {
 class Menu;
 }
@@ -15,6 +17,7 @@ class Menu : public QDialog
 public:
     explicit Menu(QWidget *parent = 0);
     ~Menu();
+    void updateGame(int playerNumber);
 
 private slots:
     void on_pushButton_clicked();
@@ -27,6 +30,7 @@ private slots:
 
 private:
     Ui::Menu *ui;
+    Server *server;
 };
 
 #endif // MENU_H

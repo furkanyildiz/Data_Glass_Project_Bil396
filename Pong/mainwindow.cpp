@@ -87,9 +87,6 @@ MainWindow::MainWindow(QWidget *parent,int game_mode) :
     ui->boardView->installEventFilter(iLoop);
 
     QObject::connect(iLoop, SIGNAL(goal(int)), this, SLOT(addScore(int)));
-    qDebug() << "denug3";
-    server = new Server(parent,this);
-    qDebug() << "denug";
 
 }
 

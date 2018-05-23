@@ -16,6 +16,7 @@ Menu::Menu(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->listWidget_2, SIGNAL(itemClicked(QListWidgetItem*, int)),
                 this, SLOT(on_listWidget_2_itemClicked(QListWidgetItem*, int)));
+    server = new Server(parent,nullptr,this);
 }
 
 Menu::~Menu()
@@ -26,55 +27,42 @@ Menu::~Menu()
 void Menu::on_pushButton_clicked()
 {
     ui->listWidget_2->hide();
-    //ui->listWidget_2->disconnect();
-        if (btn1 == 1)
-            ui->listWidget->show();
-        else {
-            ui->listWidget->addItem("Gozluk 1");
-            ui->listWidget->addItem("Gozluk 2");
-            ui->listWidget->addItem("Gozluk 3");
-            ui->listWidget->addItem("Gozluk 4");
-            ui->listWidget->addItem("Gozluk 5");
-            ui->listWidget->addItem("Gozluk 6");
-
-            btn1 = 1;
-        }
+    ui->listWidget->show();
 }
 
 void Menu::on_pushButton_2_clicked()
 {
     ui->listWidget->hide();
-        if (btn2 == 1)
-            ui->listWidget_2->show();
-        else {
-            ui->listWidget_2->addItem("PONG");
-            ui->listWidget_2->addItem("ARKANOID");
-            btn2 = 1;
-        }
+    ui->listWidget_2->show();
+}
+
+void Menu::updateGame(int playerNumber){
+    if(playerNumber == 1){
+        ui->listWidget_2->addItem("ARKANOID");
+        ui->listWidget->addItem("Glass 1");
+    }else if(playerNumber == 2){
+        ui->listWidget_2->addItem("PONG");
+        ui->listWidget->addItem("Glass 2");
+    }
 }
 
 void Menu::on_listWidget_2_itemClicked(QListWidgetItem *item)
 {
-
-    if(ui->listWidget_2->item(0) == item) {
+    if(ui->listWidget_2->item(1) == item) {
         cout << "PONG" << endl;
         MainWindow *w = new MainWindow;
         w->setWindowTitle("Pong");
+        server->mainWindow = w;
         w->show();
         this->close();
 
-    }else if(ui->listWidget_2->item(1) == item){
+    }else if(ui->listWidget_2->item(0) == item){
         cout << "ARKANOID" << endl;
         QWidget *p1 = NULL;
         MainWindow *w = new MainWindow(p1,2);
         w->setWindowTitle("Arkanoid");
+        server->mainWindow = w;
         w->show();
         this->close();
     }
 }
-
-/*
-void Menu::on_listWidget_2_itemPressed(QListWidgetItem *item)
-{
-
-}*/
