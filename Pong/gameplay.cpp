@@ -177,27 +177,27 @@ void Gameplay::arkanoid_tick(){
         int ball_x = iBall->x();
         int p2_x = iP2->pos().rx();
 
-        std::cout << "iball = " << ball_x << std::endl;
-        std::cout << "p2 = " << p2_x << std::endl;
+//        std::cout << "iball = " << ball_x << std::endl;
+//        std::cout << "p2 = " << p2_x << std::endl;
 
         qreal randomNumber = 1 + (rand()%10) * 0.1;
 
         qreal pos = qFabs(iBall->pos().rx() - iP2->pos().rx());
 
         if (pos < 2*Constant::PLAYER2_WIDTH*1/5){
-            std::cout << "left most " << std::endl;
+            //std::cout << "left most " << std::endl;
             iBallDirection.rx() = -1* 2 * randomNumber;
         }else if (pos < 2*Constant::PLAYER2_WIDTH*2/5 && pos > 2*Constant::PLAYER2_WIDTH*1/5) {
-            std::cout << "left " << std::endl;
+            //std::cout << "left " << std::endl;
             iBallDirection.rx() = -1 * randomNumber;
         }else if (pos < 2*Constant::PLAYER2_WIDTH*4/5 && pos > 2*Constant::PLAYER2_WIDTH*3/5) {
-            std::cout << "right " << std::endl;
+            //std::cout << "right " << std::endl;
             iBallDirection.rx() = randomNumber;
         }else if (pos > 2*Constant::PLAYER2_WIDTH*4/5) {
-            std::cout << "right most" << std::endl;
+            //std::cout << "right most" << std::endl;
             iBallDirection.rx() = 2*randomNumber;
         }else {
-            std::cout << "middle" << std::endl;
+            //std::cout << "middle" << std::endl;
             if(randomNumber > 1.5)
                 iBallDirection.rx() = -0.1;
             else
@@ -649,6 +649,9 @@ qreal Gameplay::calculateP1Direction(int client_data){
     return dir;
 }
 void Gameplay::setBlocks(){
+    int block_x = 0;
+    int block_y = 0;
+
     for(int i=0;i<8;i++){
         blocks[i]=new QGraphicsRectItem(0,0,Constant::BLOCK_WIDTH,Constant::BLOCK_HEIGHT);
 
@@ -658,6 +661,11 @@ void Gameplay::setBlocks(){
 
         // ekrana yerlestirilip threaddeki shared valuesa kaydediliyor x ve y koordinatlari
         if(i<5){
+            block_x = i*(Constant::BLOCK_WIDTH + 8)+12;
+            str_block_coordinates += QString::number(block_x) + ",";
+            block_y = 10;
+            str_block_coordinates += QString::number(block_y) + ";";
+
             blocks[i]->setPos(i*(Constant::BLOCK_WIDTH + 8)+12,10);
             // arkanoiddeki blocklarin koordinatlari
             //MyThread::shared.arkanoid_block_x[i] = i*(Constant::BLOCK_WIDTH + 8)+12;
@@ -665,6 +673,11 @@ void Gameplay::setBlocks(){
             /*qDebug() << "Arkanoid block" << i << "(" <<  MyThread::shared.arkanoid_block_x[i]
                         << "," <<  MyThread::shared.arkanoid_block_y[i] << ")";*/
         }else{
+            block_x = (i%5)*(Constant::BLOCK_WIDTH + 8)+12+Constant::BLOCK_WIDTH;
+            str_block_coordinates += QString::number(block_x) + ",";
+            block_y = 30;
+            str_block_coordinates += QString::number(block_y) + ";";
+
             blocks[i]->setPos((i%5)*(Constant::BLOCK_WIDTH + 8)+12+Constant::BLOCK_WIDTH,30);
             // arkanoiddeki blocklarin koordinatlari
             //MyThread::shared.arkanoid_block_x[i] = (i%5)*(Constant::BLOCK_WIDTH + 8)+12+Constant::BLOCK_WIDTH;
@@ -672,9 +685,10 @@ void Gameplay::setBlocks(){
             /*qDebug() << "Arkanoid block" << i << "(" <<  MyThread::shared.arkanoid_block_x[i]
                         << "," <<  MyThread::shared.arkanoid_block_y[i] << ")";*/
         }
-
-
     }
+    qDebug() << "blocklar asagidaki stringdeki konumlara set edildi";
+    qDebug() << str_block_coordinates;
+    cpp_string = str_block_coordinates.toStdString();
 }
 void Gameplay::detectCollusion(){
     for(int i=0;i<8;i++){
@@ -683,12 +697,41 @@ void Gameplay::detectCollusion(){
             iScene.removeItem(blocks[i]);
             block_state[i]=false;
             MyThread::shared.block_destroyed[i] = 1;
+
+            // yok olan blockun koordinatlarini silecek
+            update_block_coordinates();
+
             //defaultP2Size=defaultP2Size-5;
             //qDebug() << i << ". block yok edildi -> blockdestroyed=" << MyThread::shared.block_destroyed[i];
             //iP2->setRect(0,0,defaultP2Size,5);
             //std::cout << "bir block yok edildi" << std::endl;
         }
     }
+}
+
+void Gameplay::update_block_coordinates(){
+    int block_x = 0;
+    int block_y = 0;
+    str_block_coordinates = "";
+
+    for(int i = 0; i < 8; ++i){
+        if(block_state[i] == true){
+            if(i < 5){
+                block_x = i*(Constant::BLOCK_WIDTH + 8)+12;
+                str_block_coordinates += QString::number(block_x) + ",";
+                block_y = 10;
+                str_block_coordinates += QString::number(block_y) + ";";
+            }else{
+                block_x = (i%5)*(Constant::BLOCK_WIDTH + 8)+12+Constant::BLOCK_WIDTH;
+                str_block_coordinates += QString::number(block_x) + ",";
+                block_y = 30;
+                str_block_coordinates += QString::number(block_y) + ";";
+            }
+        }
+    }
+    qDebug() << "updated coordinates =" << str_block_coordinates;
+    cpp_string = str_block_coordinates.toStdString(); // qstring veya cpp stringi
+    //std::cout << "cpp = " << cpp_string << std::endl;
 }
 
 void Gameplay::detectSideCollusion() {

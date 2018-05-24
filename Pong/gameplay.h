@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QLabel>
+#include <QString>
 #include <QGraphicsScene>
 #include "constants.h"
 class QGraphicsItem;
@@ -34,6 +35,7 @@ private:
     void check_blocks();
     void set_pong();
     void set_arkanoid();
+    void update_block_coordinates();
     qreal calculateP2Direction(int client_data);
     qreal calculateP1Direction(int client_data);
     int data = 5;
@@ -47,6 +49,8 @@ private:
     QGraphicsItem  *iBall, *iToken, *iBall_2;
     QGraphicsRectItem *left_side;
     QGraphicsRectItem *blocks[8], *iP1 , *iP2;
+    QString str_block_coordinates;
+    std::string cpp_string;
     bool block_state[8];
     bool side_state = true;
     void setBlocks();
