@@ -388,19 +388,19 @@ void Gameplay::pong_tick(){
         qreal pos = qFabs(iBall->pos().rx() - iP2->pos().rx());
 
         if (pos < 2*Constant::PLAYER2_WIDTH*1/5){
-            std::cout << "left most " << std::endl;
+            //std::cout << "left most " << std::endl;
             iBallDirection.rx() = -1* 2 * randomNumber;
         }else if (pos < 2*Constant::PLAYER2_WIDTH*2/5 && pos > 2*Constant::PLAYER2_WIDTH*1/5) {
-            std::cout << "left " << std::endl;
+           // std::cout << "left " << std::endl;
             iBallDirection.rx() = -1 * randomNumber;
         }else if (pos < 2*Constant::PLAYER2_WIDTH*4/5 && pos > 2*Constant::PLAYER2_WIDTH*3/5) {
-            std::cout << "right " << std::endl;
+            //std::cout << "right " << std::endl;
             iBallDirection.rx() = randomNumber;
         }else if (pos > 2*Constant::PLAYER2_WIDTH*4/5) {
-            std::cout << "right most" << std::endl;
+            //std::cout << "right most" << std::endl;
             iBallDirection.rx() = 2*randomNumber;
         }else {
-            std::cout << "middle" << std::endl;
+            //std::cout << "middle" << std::endl;
             if(randomNumber > 1.5)
                 iBallDirection.rx() = -0.1;
             else
@@ -420,19 +420,19 @@ void Gameplay::pong_tick(){
         qreal pos = qFabs(iBall->pos().rx() - iP2->pos().rx());
 
         if (pos < 2*Constant::PLAYER2_WIDTH*1/5){
-            std::cout << "left most " << std::endl;
+            //std::cout << "left most " << std::endl;
             iBallDirection.rx() = -1* 2 * randomNumber;
         }else if (pos < 2*Constant::PLAYER2_WIDTH*2/5 && pos > 2*Constant::PLAYER2_WIDTH*1/5) {
-            std::cout << "left " << std::endl;
+           // std::cout << "left " << std::endl;
             iBallDirection.rx() = -1 * randomNumber;
         }else if (pos < 2*Constant::PLAYER2_WIDTH*4/5 && pos > 2*Constant::PLAYER2_WIDTH*3/5) {
-            std::cout << "right " << std::endl;
+            //std::cout << "right " << std::endl;
             iBallDirection.rx() = randomNumber;
         }else if (pos > 2*Constant::PLAYER2_WIDTH*4/5) {
-            std::cout << "right most" << std::endl;
+            //std::cout << "right most" << std::endl;
             iBallDirection.rx() = 2*randomNumber;
         }else {
-            std::cout << "middle" << std::endl;
+            //std::cout << "middle" << std::endl;
             if(randomNumber > 1.5)
                 iBallDirection.rx() = -0.1;
             else
@@ -479,19 +479,19 @@ void Gameplay::pong_tick(){
 
 
         if (pos < 2*Constant::PLAYER2_WIDTH*1/5){
-            std::cout << "left most " << std::endl;
+            //std::cout << "left most " << std::endl;
             iBallDirection.rx() = -2 * randomNumber;
         }else if (pos < 2*Constant::PLAYER2_WIDTH*2/5 && pos > 2*Constant::PLAYER2_WIDTH*1/5) {
-            std::cout << "left " << std::endl;
-            iBallDirection.rx() = randomNumber;
+            //std::cout << "left " << std::endl;
+            iBallDirection.rx() = -1 * randomNumber;
         }else if (pos < 2*Constant::PLAYER2_WIDTH*4/5 && pos > 2*Constant::PLAYER2_WIDTH*3/5) {
-            std::cout << "right " << std::endl;
+            //std::cout << "right " << std::endl;
             iBallDirection.rx() = randomNumber;
         }else if (pos > 2*Constant::PLAYER2_WIDTH*4/5) {
-            std::cout << "right most" << std::endl;
+            //std::cout << "right most" << std::endl;
             iBallDirection.rx() = 2*randomNumber;
         }else {
-            std::cout << "middle" << std::endl;
+            //std::cout << "middle" << std::endl;
             if(randomNumber > 1.5)
                 iBallDirection.rx() = -0.1;
             else
@@ -507,19 +507,19 @@ void Gameplay::pong_tick(){
         qreal pos = qFabs(iBall->pos().rx() - iP1->pos().rx());
 
         if (pos < 2*Constant::PLAYER2_WIDTH*1/5){
-            std::cout << "left most " << std::endl;
-            iBallDirection.rx() = 2 * randomNumber;
+            //std::cout << "left most " << std::endl;
+            iBallDirection.rx() = -2 * randomNumber;
         }else if (pos < 2*Constant::PLAYER2_WIDTH*2/5 && pos > 2*Constant::PLAYER2_WIDTH*1/5) {
-            std::cout << "left " << std::endl;
-            iBallDirection.rx() = randomNumber;
+            //std::cout << "left " << std::endl;
+            iBallDirection.rx() = -1 * randomNumber;
         }else if (pos < 2*Constant::PLAYER2_WIDTH*4/5 && pos > 2*Constant::PLAYER2_WIDTH*3/5) {
-            std::cout << "right " << std::endl;
+            //std::cout << "right " << std::endl;
             iBallDirection.rx() = -randomNumber;
         }else if (pos > 2*Constant::PLAYER2_WIDTH*4/5) {
-            std::cout << "right most" << std::endl;
+            //std::cout << "right most" << std::endl;
             iBallDirection.rx() = -2*randomNumber;
         }else {
-            std::cout << "middle" << std::endl;
+            //std::cout << "middle" << std::endl;
             if(randomNumber > 1.5)
                 iBallDirection.rx() = -0.1;
             else

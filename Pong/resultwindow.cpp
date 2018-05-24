@@ -20,14 +20,14 @@ ResultWindow::ResultWindow(QWidget *parent, int player_no, int game_mode) :
 
     // kazanan oyuncuya gore fotoyu aliyor
     if(player_no == 1 && game_mode == 1){ // player1 kazandi
-        player_win_photo = new QPixmap(":/Images/player1wins.png");
-        QPixmap scaledGameBG = player_win_photo->scaled(QSize(Constant::GAME_AREA_WIDTH, Constant::GAME_AREA_HEIGHT/4));
+        player_win_photo = new QPixmap(":/Images/p1w.png");
+        QPixmap scaledGameBG = player_win_photo->scaled(QSize(365, 245));
         QGraphicsPixmapItem *area = new QGraphicsPixmapItem();
         area->setPixmap(scaledGameBG);
         scene->addItem(area);
     }else if(player_no == 2 && game_mode == 1){ // player2 kazandi
-        player_win_photo = new QPixmap(":/Images/player2wins.png");
-        QPixmap scaledGameBG = player_win_photo->scaled(QSize(Constant::GAME_AREA_WIDTH, Constant::GAME_AREA_HEIGHT/4));
+        player_win_photo = new QPixmap(":/Images/p2w.jpg");
+        QPixmap scaledGameBG = player_win_photo->scaled(QSize(365, 245));
         QGraphicsPixmapItem *area = new QGraphicsPixmapItem();
         area->setPixmap(scaledGameBG);
         scene->addItem(area);
