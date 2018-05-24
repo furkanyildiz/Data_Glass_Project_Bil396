@@ -29,7 +29,8 @@ SOURCES +=  main.cpp\
             menu.cpp\
             server.cpp \
     mythread.cpp \
-    resultwindow.cpp
+    resultwindow.cpp \
+    gerisayimekrani.cpp
 
 HEADERS  += mainwindow.h \
             gameplay.h \
@@ -37,11 +38,13 @@ HEADERS  += mainwindow.h \
     server.h \
     mythread.h \
     constants.h \
-    resultwindow.h
+    resultwindow.h \
+    gerisayimekrani.h
 
 FORMS    += mainwindow.ui\
             menu.ui \
-    resultwindow.ui
+    resultwindow.ui \
+    gerisayimekrani.ui
 
 RESOURCES += \
     resources.qrc

@@ -24,7 +24,7 @@ Gameplay::Gameplay(QGraphicsScene & scene, QGraphicsRectItem *p1, QGraphicsRectI
     iBall ( ball ),
     iToken ( token ),
     iBall_2 (ball2),
-    iTokenDirection(+1, -1),
+    iTokenDirection(+3, -3),
     iBallDirection ( -3,-3), //ilk anda topun hareket yönü
     iBall2Direction(0, 0),
     iP1Direction( 0 ),
@@ -77,7 +77,7 @@ void Gameplay::set_pong(){
     // iP2->setRect(0,0,Constant::PLAYER2_WIDTH, Constant::PLAYER2_HEIGHT);
     iScene.addItem(iP2);
     iScene.addItem(iBall);
-    left_side =new QGraphicsRectItem(0, 0, Constant::BLOCK_HEIGHT - 10, Constant::BLOCK_WIDTH + 100);
+    left_side =new QGraphicsRectItem(0, 0, Constant::BLOCK_HEIGHT - 10, Constant::BLOCK_WIDTH + 10);
 
     iScene.addItem(left_side);
     left_side->setBrush(QBrush(Qt::red));
@@ -291,12 +291,17 @@ void Gameplay::pong_tick(){
         emit goal(newY / fabs(newY));
 
         iBall->setPos(Constant::GAME_AREA_WIDTH/2, Constant::GAME_AREA_HEIGHT/2);
-        iToken->setVisible(true);
-        MyThread::shared.flag_token = 1;
-        iToken->setPos(Constant::GAME_AREA_WIDTH/3, Constant::GAME_AREA_HEIGHT/2);
-        iTokenDirection.rx() = 2;
-        iTokenDirection.ry() = -2;
-        iTokenDirection *= -1;
+
+        // skorlari toplami tek iken token cikar
+        if((p1Score+p2Score) % 2 == 1){
+            iToken->setVisible(true);
+            MyThread::shared.flag_token = 1;
+
+            iToken->setPos(Constant::GAME_AREA_WIDTH/3, Constant::GAME_AREA_HEIGHT/2);
+            iTokenDirection.rx() = 2;
+            iTokenDirection.ry() = -2;
+            iTokenDirection *= -1;
+        }
 
         iP2->setRect(0,0,Constant::PLAYER2_WIDTH*2, Constant::PLAYER2_HEIGHT); //2yebol
         iP1->setRect(0,0,Constant::PLAYER2_WIDTH*2, Constant::PLAYER2_HEIGHT); //2yebol
@@ -338,13 +343,18 @@ void Gameplay::pong_tick(){
 
         emit goal(newY2 / fabs(newY2));
         iBall->setPos(Constant::GAME_AREA_WIDTH/2, Constant::GAME_AREA_HEIGHT/2);
-        iToken->setVisible(true);
-        MyThread::shared.flag_token = 1;
 
-        iToken->setPos(Constant::GAME_AREA_WIDTH/3, Constant::GAME_AREA_HEIGHT/2);
-        iTokenDirection.rx() = 2;
-        iTokenDirection.ry() = -2;
-        iTokenDirection *= -1;
+        // skorlari toplami tek iken token cikar
+        if((p1Score+p2Score) % 2 == 1){
+            iToken->setVisible(true);
+            MyThread::shared.flag_token = 1;
+
+            iToken->setPos(Constant::GAME_AREA_WIDTH/3, Constant::GAME_AREA_HEIGHT/2);
+            iTokenDirection.rx() = 2;
+            iTokenDirection.ry() = -2;
+            iTokenDirection *= -1;
+        }
+
 
         iP2->setRect(0,0,Constant::PLAYER2_WIDTH, Constant::PLAYER2_HEIGHT);
         iP1->setRect(0,0,Constant::PLAYER2_WIDTH, Constant::PLAYER2_HEIGHT);
@@ -446,22 +456,24 @@ void Gameplay::pong_tick(){
          iTokenDirection.rx() *= -1;
      }
 
+    //yukari gol oldugunda
     if ( newTokenY < 0 )
      {
         // -1 for hitting the top wall
-        iP2->setRect(0,0,Constant::PLAYER2_WIDTH*2,5);
+        iP2->setRect(0,0,Constant::PLAYER2_WIDTH*2.5,5); // 2 ile carp
         iTokenDirection.rx() = 0;
         iTokenDirection.ry() = 0;
-        iToken->setPos(100, 100);
+        iToken->setPos(999, Constant::PLAYER1_HEIGHT/2);
         MyThread::shared.flag_token = 0;
         iToken->setVisible(false);
      }
+    //asagi gol oldugunda
     if( newTokenY + iToken->boundingRect().bottom() > iScene.sceneRect().bottom()){
          //hitting bottom
-         iP1->setRect(0,0,Constant::PLAYER1_WIDTH*2,5);
+         iP1->setRect(0,0,Constant::PLAYER1_WIDTH*2.5,5); // 2 ile carp
          iTokenDirection.rx() = 0;
          iTokenDirection.ry() = 0;
-         iToken->setPos(100, 100);
+         iToken->setPos(999, Constant::PLAYER1_HEIGHT/2);
          MyThread::shared.flag_token = 0;
          iToken->setVisible(false);
      }

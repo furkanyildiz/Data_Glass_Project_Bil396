@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QListWidgetItem>
 #include <server.h>
-
+#include "gerisayimekrani.h"
 class Server;
 namespace Ui {
 class Menu;
@@ -20,15 +20,16 @@ public:
     void updateGame(int playerNumber);
 
 private slots:
-    void on_pushButton_clicked();
+    void arkanoid_stop_screen();
+    void pong_stop_screen();
+    void on_arkanoid_button_clicked();
 
-    void on_pushButton_2_clicked();
 
-    void on_listWidget_2_itemClicked(QListWidgetItem *item);
-
-    //void on_listWidget_2_itemPressed(QListWidgetItem *item);
+    void on_pong_button_clicked();
 
 private:
+    QTimer *timer;
+    GeriSayimEkrani *countdown;
     Ui::Menu *ui;
     Server *server;
 };

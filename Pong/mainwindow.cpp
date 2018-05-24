@@ -176,14 +176,14 @@ void MainWindow::addScore(int count)
         QMovie *movie = new QMovie(":/Images/meksika.gif");
 
         // boyutu burada ayarlanacak
-        movie->setScaledSize(QSize(200,25));
-        ui->goalScreen->setGeometry(10, 10, 200, 25);
-        ui->goalScreen->setAlignment(Qt::AlignCenter);
+//        movie->setScaledSize(QSize(200,25));
+//        ui->goalScreen->setGeometry(10, 10, 200, 25);
+//        ui->goalScreen->setAlignment(Qt::AlignCenter);
 
-        ui->goalScreen->setMovie(movie);
-        movie->start();
-        QTimer::singleShot(1500, ui->goalScreen, &QLabel::hide);
-        ui->goalScreen->setVisible(true);
+//        ui->goalScreen->setMovie(movie);
+//        movie->start();
+//        QTimer::singleShot(1500, ui->goalScreen, &QLabel::hide);
+//        ui->goalScreen->setVisible(true);
     }
 
 }
