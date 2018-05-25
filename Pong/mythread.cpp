@@ -39,35 +39,17 @@ void MyThread::run()
 
 void MyThread::readWrite()
 {
-    qDebug()<< "SINYAL GELDI!!!!!!!";
+//     qDebug()<< "SINYAL GELDI!!!!!!!";
 
     if (shared.game_mode == 1)
             Pong_mode();
 
-        qDebug()<< "SINYAL bitti";
+    else if(shared.game_mode == 0)
+        Arkanoid_mode();
+    else
+        qDebug()<< "GAME MODE ERROR!!!";
 
-/*
-    qDebug()<<"READY READ AND WRITE";
-
-
-    QByteArray recData = socket->readAll();
-
-    qDebug() << socketDescriptor << " This message receiving from data glass : " << recData;
-
-    QString sendMessage = "1234;56;789;0;12";
-    QByteArray sendByte = sendMessage.toUtf8() ;
-    socket->write(sendByte);
-
-*/
-
-   // while (socket->canReadLine()) {
-
-
-
-
-
-    //}
-
+//     qDebug()<< "SINYAL bitti";
 
 }
 
@@ -182,7 +164,9 @@ void MyThread::Pong_mode(){
         }
 
 }
-
+void MyThread::Arkanoid_mode(){
+    
+}
 void MyThread::disconnected()
 {
 /*    qDebug() << socketDescriptor << " Disconnected";
