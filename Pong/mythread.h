@@ -70,6 +70,7 @@ private:
     int thread_id;
     std::string send_string;
     void Pong_mode();
+    void Arkanoid_mode();
 
 };
 
