@@ -121,32 +121,22 @@ void *readSocket(void *vargp)
 		numBytesRcvd = recv(sock , buffer, 50,0);
 		buffer[numBytesRcvd] = '\0';
 		readed = strtok(buffer, "\n");
-		fprintf(stderr,"serverdan okunan_: %s\n",buffer );
 		split_str = strdupf(readed);
 		fprintf(stderr,"serverdan okunan: %s\n",split_str );
-		//token = strtok(split_str, ";");
-		//token = strtok(NULL, ";");
-		//token = strtok(NULL, ";");       
-		fprintf(stderr,"numBytesRcvd:%d\n",numBytesRcvd );
-
-
 
 		if (count_occur(split_str) ==3){
 			fprintf(stderr,"ifte");
 
 			token = strtok(split_str, ";");
 			if (token == '\0')break;
-			fprintf(stderr,"other gyro len:%d, kendi:%s\n",strlen(token), token );
 			other_gyro = atoi(token);
 			
 			token = strtok(NULL, ";");
 			if (token == '\0')break;
-			fprintf(stderr,"topxlen:%d, kendi:%s\n",strlen(token), token );
 			topx = atoi(token);
 			
 			token = strtok(NULL, ";");       
 			if (token == '\0')break;
-			fprintf(stderr,"topy len:%d, kendi:%s\n",strlen(token), token );
 			topy = atoi(token);
 
 			//aşağıdakıler server tarafından da yorumla kapalı yani gonderılmıyor.İki taraftada açılabilinir.
