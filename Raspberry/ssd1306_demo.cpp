@@ -22,7 +22,7 @@ int sock = 0;
 void *writeSocket(void *vargp);
 void *readSocket(void *vargp);
 char *strdupf (const char *s);
-
+int count_occur(const char* str);
 int main(int argc, char **argv)
 {
     struct sockaddr_in address;
@@ -111,25 +111,42 @@ int main(int argc, char **argv)
 }
 void *readSocket(void *vargp)
 {
-	int numBytesRcvd,other_gyro,topx,topy,flag_second_ball,second_ball_x,second_ball_y,flag_token,token_x,token_y,flag_block,block_x,block_y;
+	int numBytesRcvd,other_gyro,balanced_gyro,topx,topy,flag_second_ball,second_ball_x,second_ball_y,flag_token,token_x,token_y,flag_block,block_x,block_y;
 	char buffer[50] = {0};
 	char * readed ;
 	char*token;
 	char* split_str;
-    while(1){
+    while(1){while(1){
 		
 		numBytesRcvd = recv(sock , buffer, 50,0);
 		buffer[numBytesRcvd] = '\0';
 		readed = strtok(buffer, "\n");
-		fprintf(stderr,"serverdan okunan: %s\n",readed );
+		fprintf(stderr,"serverdan okunan_: %s\n",buffer );
 		split_str = strdupf(readed);
-		if (numBytesRcvd > 0){
+		fprintf(stderr,"serverdan okunan: %s\n",split_str );
+		//token = strtok(split_str, ";");
+		//token = strtok(NULL, ";");
+		//token = strtok(NULL, ";");       
+		fprintf(stderr,"numBytesRcvd:%d\n",numBytesRcvd );
+
+
+
+		if (count_occur(split_str) ==3){
+			fprintf(stderr,"ifte");
 
 			token = strtok(split_str, ";");
+			if (token == '\0')break;
+			fprintf(stderr,"other gyro len:%d, kendi:%s\n",strlen(token), token );
 			other_gyro = atoi(token);
+			
 			token = strtok(NULL, ";");
+			if (token == '\0')break;
+			fprintf(stderr,"topxlen:%d, kendi:%s\n",strlen(token), token );
 			topx = atoi(token);
+			
 			token = strtok(NULL, ";");       
+			if (token == '\0')break;
+			fprintf(stderr,"topy len:%d, kendi:%s\n",strlen(token), token );
 			topy = atoi(token);
 
 			//aşağıdakıler server tarafından da yorumla kapalı yani gonderılmıyor.İki taraftada açılabilinir.
@@ -160,20 +177,32 @@ void *readSocket(void *vargp)
 			
 			token = strtok(NULL, ";");  
 			block_y = atoi(token);
-*/
+*//*
 			display.clearDisplay();
 			display.fillCircle(topy, topx, 2, WHITE);
 			display.drawFastVLine(2, balanced_gyro, 15, WHITE);
 			display.drawFastVLine(126, other_gyro, 15, WHITE);
 			display.drawRect(0,0,128,64,WHITE);
 			display.display();
-			//delay(1);
+			//delay(1);*/
 
 		}
 		
-	}
+	}}
 	free(split_str);
 }
+
+int count_occur(const char* str){
+	
+	int occur = 0;
+	while(*str != '\0'){
+		if(*str == ';')
+			++occur;
+		str = ++str;
+	}
+	return occur;
+}
+
 void *writeSocket(void *vargp)
 {
 	int balanced_gyro,acclX;
@@ -192,7 +221,7 @@ void *writeSocket(void *vargp)
 	}
 }
 char *strdupf (const char *s) {
-    char *d = malloc (strlen (s) + 1);   // Space for length plus nul
+    char *d = (char *)malloc (strlen (s) + 1);   // Space for length plus nul
     if (d == NULL) return NULL;          // No memory
     strcpy (d,s);                        // Copy the characters
     return d;                            // Return the new string
