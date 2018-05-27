@@ -14,6 +14,7 @@
 #include <QMovie>
 #include <QThread>
 #include <QTime>
+#include <QGraphicsBlurEffect>
 
 MainWindow::MainWindow(QWidget *parent,int game_mode) :
     QMainWindow(parent),
@@ -40,6 +41,8 @@ MainWindow::MainWindow(QWidget *parent,int game_mode) :
 
     QGraphicsRectItem *token = new QGraphicsRectItem(0, 0, 5, 5);
     token->setBrush(QBrush(Qt::black));
+    QGraphicsBlurEffect *blur = new QGraphicsBlurEffect(this);
+    token->setGraphicsEffect(blur);
 
     /*QGraphicsRectItem *innerPanel= new QGraphicsRectItem(0,0,128,256);//oyunun sınırlarını gösteren panel
     innerPanel->setBrush(QBrush(Qt::yellow));
