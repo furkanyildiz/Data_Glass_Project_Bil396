@@ -16,7 +16,9 @@
 int x_pos_of_ball;
 int y_pos_of_ball;
 
-Gameplay::Gameplay(QGraphicsScene & scene, QGraphicsRectItem *p1, QGraphicsRectItem *p2, QGraphicsItem *ball,int gameMode, QGraphicsItem *token, QObject *parent, QGraphicsItem *ball2) :
+Gameplay::Gameplay(QGraphicsScene & scene, QGraphicsRectItem *p1, QGraphicsRectItem *p2, QGraphicsItem *ball,
+                   int gameMode, QGraphicsItem *token, QObject *parent, QGraphicsItem *ball2,
+                   QGraphicsPixmapItem *mainarea,QGraphicsPixmapItem *goalarea) :
     QObject(parent),
     iScene ( scene ),
     iP1 ( p1 ),
@@ -24,11 +26,13 @@ Gameplay::Gameplay(QGraphicsScene & scene, QGraphicsRectItem *p1, QGraphicsRectI
     iBall ( ball ),
     iToken ( token ),
     iBall_2 (ball2),
-    iTokenDirection(+3, -3),
+    iTokenDirection(+1, -1),
     iBallDirection ( -3,-3), //ilk anda topun hareket yönü
     iBall2Direction(0, 0),
     iP1Direction( 0 ),
-    iP2Direction( 0 )
+    iP2Direction( 0 ),
+    mainArea(mainarea),
+    goalArea(goalarea)
 {
     g_mode = gameMode;
 
@@ -41,7 +45,36 @@ Gameplay::Gameplay(QGraphicsScene & scene, QGraphicsRectItem *p1, QGraphicsRectI
         QObject::connect(iTimer, SIGNAL(timeout()), this, SLOT(arkanoid_tick()));
     }
 
+    // goal ekrani icin
+
+    QObject::connect(this, SIGNAL(stopGame(int)), this, SLOT(pauseGame(int)));
+    gTimer = new QTimer(this);
+    QObject::connect(gTimer, SIGNAL(timeout()), this, SLOT(breakLoop()));
 }
+
+void Gameplay::breakLoop(){
+    gTimer->stop();
+    iTimer->setInterval(20);
+    iTimer->start();
+    flagStop = 1;
+    //qDebug()<< "BREAK LOOP CAGRILDI";
+    flagStop=0;
+    //qDebug()<<"OYUN DURDUUUUUUU";
+    mainArea->setVisible(true);
+    goalArea->setVisible(false);
+
+}
+void Gameplay::pauseGame(int time)
+{
+    mainArea->setVisible(false);
+    goalArea->setVisible(true);
+
+    gTimer->start(3000);
+    iTimer->stop();
+    //while(flagStop==0);
+
+}
+
 void Gameplay::set_arkanoid(){
 
     iScene.setSceneRect(0, 0, Constant::GAME_AREA_WIDTH, Constant::GAME_AREA_HEIGHT);
@@ -86,15 +119,18 @@ void Gameplay::set_pong(){
 
     iP2->setPos(Constant::PLAYER2_POS_X, Constant::PLAYER2_POS_Y-8);
     iBall->setPos(Constant::GAME_AREA_WIDTH/2, Constant::GAME_AREA_HEIGHT/2);
-    iToken->setPos(Constant::GAME_AREA_WIDTH/3 + 5, Constant::GAME_AREA_HEIGHT/2 - 5);
     iP1->setPos(Constant::PLAYER1_POS_X, Constant::PLAYER1_POS_Y+8);
+    // oyunun basinda token olmayacak
+    iToken->setPos(999, Constant::PLAYER1_HEIGHT/2);
+    iToken->setVisible(false);
+
 //    std::cout << "the position of token and p1 are set" << std::endl;
 
 
     iTimer = new QTimer(this);
     iTimer->setInterval(20);
     iTimer->start();
-    MyThread::shared.flag_token = 1;
+    MyThread::shared.flag_token = 0;
     MyThread::shared.flag_block = 1;
     MyThread::shared.game_mode = 1; // pong oyunu set edildi
 }
@@ -301,6 +337,10 @@ void Gameplay::pong_tick(){
             iTokenDirection.rx() = 2;
             iTokenDirection.ry() = -2;
             iTokenDirection *= -1;
+        }else{
+            iToken->setVisible(false);
+            MyThread::shared.flag_token = 0;
+             iToken->setPos(999, Constant::PLAYER1_HEIGHT/2);
         }
 
         iP2->setRect(0,0,Constant::PLAYER2_WIDTH*2, Constant::PLAYER2_HEIGHT); //2yebol
@@ -353,6 +393,10 @@ void Gameplay::pong_tick(){
             iTokenDirection.rx() = 2;
             iTokenDirection.ry() = -2;
             iTokenDirection *= -1;
+        }else{
+            iToken->setVisible(false);
+            MyThread::shared.flag_token = 0;
+             iToken->setPos(999, Constant::PLAYER1_HEIGHT/2);
         }
 
 
@@ -459,6 +503,7 @@ void Gameplay::pong_tick(){
     //yukari gol oldugunda
     if ( newTokenY < 0 )
      {
+        qDebug() << "token gol";
         // -1 for hitting the top wall
         iP2->setRect(0,0,Constant::PLAYER2_WIDTH*2.5,5); // 2 ile carp
         iTokenDirection.rx() = 0;
@@ -469,7 +514,8 @@ void Gameplay::pong_tick(){
      }
     //asagi gol oldugunda
     if( newTokenY + iToken->boundingRect().bottom() > iScene.sceneRect().bottom()){
-         //hitting bottom
+        qDebug() << "token gol";
+        //hitting bottom
          iP1->setRect(0,0,Constant::PLAYER1_WIDTH*2.5,5); // 2 ile carp
          iTokenDirection.rx() = 0;
          iTokenDirection.ry() = 0;

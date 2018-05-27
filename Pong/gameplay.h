@@ -18,17 +18,21 @@ class Gameplay : public QObject
     Q_OBJECT // bu macro meta-obje içeren tüm classlarda bulunmalı,q
 
 public:
-    explicit Gameplay(QGraphicsScene & scene, QGraphicsRectItem *p1, QGraphicsRectItem *p2, QGraphicsItem *ball,int gameMode, QGraphicsItem *token,QObject *parent, QGraphicsItem *ball2);
+    explicit Gameplay(QGraphicsScene & scene, QGraphicsRectItem *p1, QGraphicsRectItem *p2, QGraphicsItem *ball,
+                         int gameMode, QGraphicsItem *token,QObject *parent, QGraphicsItem *ball2,
+                         QGraphicsPixmapItem *mainarea,QGraphicsPixmapItem *goalarea);
 protected:
     virtual bool eventFilter(QObject *, QEvent *);
 
 signals:
     void goal(int player);
+    void stopGame(int time);
 
 private slots:
     void pong_tick();
     void arkanoid_tick();
-
+    void pauseGame(int time);
+        void breakLoop();
 private:
     void check_pong_winner(int player);
     void check_arkanoid_winner();
@@ -44,6 +48,7 @@ private:
     int p2Score = 0;
     int block_count = 0;
     bool game_over = false;
+    int flagStop = 0;
 private:
     QGraphicsScene & iScene;
     QGraphicsItem  *iBall, *iToken, *iBall_2;
@@ -68,6 +73,9 @@ private:
     int g_mode;
     int gyro1;
     int gyro2;
+    QGraphicsPixmapItem *mainArea;
+    QGraphicsPixmapItem *goalArea;
+    QTimer *gTimer;
 };
 
 #endif // GAMEPLAY_H

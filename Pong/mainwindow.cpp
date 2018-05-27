@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent,int game_mode) :
     else
         gameBackGround = new QPixmap(":/Images/darkSpace.jpg");
 
-    goalBackGround = new QPixmap(":/Images/goalscreen.jpg");
+    goalBackGround = new QPixmap(":/Images/GOAL.png");
     QPixmap scaledGameBG = gameBackGround->scaled(QSize(Constant::GAME_AREA_WIDTH, Constant::GAME_AREA_HEIGHT));
     area = new QGraphicsPixmapItem();
     area->setPixmap(scaledGameBG);
@@ -75,9 +75,9 @@ MainWindow::MainWindow(QWidget *parent,int game_mode) :
     }
 
     if(g_mode==1)
-        iLoop = new Gameplay(*scene, p1, p2, ball,g_mode, token, this, ball2); // GamePlay objesi oluşturuldu. Oyunu bu yönetir.
+        iLoop = new Gameplay(*scene, p1, p2, ball,g_mode, token, this, ball2, area, goalarea); // GamePlay objesi oluşturuldu. Oyunu bu yönetir.
     else{
-        iLoop = new Gameplay(*scene, p1, p2, ball,g_mode, token, this, ball2);
+        iLoop = new Gameplay(*scene, p1, p2, ball,g_mode, token, this, ball2, area, goalarea);
     }
     QSize m(scene->sceneRect().size().width()+5, scene->sceneRect().size().height()+5);
 
@@ -85,6 +85,8 @@ MainWindow::MainWindow(QWidget *parent,int game_mode) :
 
     resize(m);
     ui->boardView->installEventFilter(iLoop);
+
+    mTimer = new QTimer(this);
 
     QObject::connect(iLoop, SIGNAL(goal(int)), this, SLOT(addScore(int)));
 
@@ -184,6 +186,7 @@ void MainWindow::addScore(int count)
 //        movie->start();
 //        QTimer::singleShot(1500, ui->goalScreen, &QLabel::hide);
 //        ui->goalScreen->setVisible(true);
+        emit iLoop->stopGame(3);
     }
 
 }

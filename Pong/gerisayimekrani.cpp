@@ -11,7 +11,7 @@ GeriSayimEkrani::GeriSayimEkrani(QWidget *parent) :
     ui->setupUi(this);
     qDebug() << "geri sayim olusturuldu";
     // baslangic ekrani
-    QMovie *movie = new QMovie(":/Images/countdown3.gif");
+    QMovie *movie = new QMovie(":/Images/3seconds.gif");
     movie->setScaledSize(QSize(430,300));
     ui->gerisayim->setMovie(movie);
     movie->start();

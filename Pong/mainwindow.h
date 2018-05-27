@@ -37,6 +37,8 @@ private:
     int P2iScore;
     std::string str;
     Server *server;
+    QTimer *mTimer;
+
 };
 
 #endif // MAINWINDOW_H
